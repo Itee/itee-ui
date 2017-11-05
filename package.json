@@ -1,0 +1,19 @@
+{
+  "name": "itee-ui",
+  "version": "0.0.0",
+  "description": "Itee design resources for client side, containing styles, templates and icons.",
+  "main": "sources/itee-ui.js",
+  "scripts": {},
+  "keywords": [],
+  "author": {
+    "name": "Tristan Valcke",
+    "url": "https://github.com/Itee"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Itee/itee-ui"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
