@@ -92,8 +92,8 @@ function CreateRollupConfigs ( options ) {
             const outputPath = ( isProd ) ? path.join( output, `${fileName}.${format}.min.js` ) : path.join( output, `${fileName}.${format}.js` )
 
             configs.push( {
-                input:     input,
-                external:  [
+                input:    input,
+                external: [
                     'itee-utils',
                     'itee-validators',
                     'vue',
@@ -102,7 +102,7 @@ function CreateRollupConfigs ( options ) {
                     'stats.js',
                     'three-full'
                 ],
-                plugins:   [
+                plugins: [
                     commonjs( {
                         include: 'node_modules/**'
                     } ),
@@ -111,7 +111,7 @@ function CreateRollupConfigs ( options ) {
                     } ),
                     isProd && terser()
                 ],
-                onwarn:    ( { loc, frame, message } ) => {
+                onwarn: ( { loc, frame, message } ) => {
 
                     // Ignore some errors
                     if ( message.includes( 'Circular dependency' ) ) { return }
@@ -130,7 +130,7 @@ function CreateRollupConfigs ( options ) {
                     propertyReadSideEffects: true,
                     tryCatchDeoptimization:  true
                 },
-                output:    {
+                output: {
                     // core options
                     file:    outputPath,
                     format:  format,
