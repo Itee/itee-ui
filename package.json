@@ -2,7 +2,44 @@
   "name": "itee-ui",
   "version": "0.0.0",
   "description": "Itee design resources for client side, containing styles, templates and icons.",
-  "main": "sources/itee-ui.js",
+  "keywords": [
+    "itee",
+    "ui",
+    "library",
+    "frontend",
+    "vue",
+    "react"
+  ],
+  "author": {
+    "name": "Itee (Tristan Valcke)",
+    "url": "https://github.com/Itee"
+  },
+  "contributors": [],
+  "license": "BSD-3-Clause",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Itee/itee-ui"
+  },
+  "main": "builds/itee-ui.cjs.js",
+  "module": "builds/itee-ui.esm.js",
+  "browser": "builds/itee-ui.iife.js",
+  "homepage": "https://github.com/Itee/itee-ui#readme",
+  "man": "./documentation/API/index.html",
+  "bugs": {
+    "url": "https://github.com/Itee/itee-ui/issues"
+  },
+  "engines": {
+    "node": ">=8.16.0"
+  },
+  "os": [
+    "win32",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "ia32"
+  ],
   "scripts": {
     "default": "gulp",
     "help": "gulp help",
@@ -16,29 +53,18 @@
     "test": "gulp test",
     "build": "gulp build",
     "release": "gulp release",
-    "semantic-release": "semantic-release"
-  },
-  "keywords": [
-    "itee",
-    "ui",
-    "library",
-    "frontend",
-    "vue",
-    "react"
-  ],
-  "author": {
-    "name": "Itee (Tristan Valcke)",
-    "url": "https://github.com/Itee"
-  },
-  "license": "BSD-3-Clause",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Itee/itee-ui"
+    "semantic-release": "semantic-release --dry-run --no-ci",
+    "postversion": "gulp build"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.20",
+    "@fortawesome/fontawesome-svg-core": "^1.2.21",
+    "@fortawesome/free-brands-svg-icons": "^5.10.1",
+    "@fortawesome/free-regular-svg-icons": "^5.10.1",
+    "@fortawesome/free-solid-svg-icons": "^5.10.1",
     "@fortawesome/vue-fontawesome": "^0.1.6",
-    "itee-utils": "^4.0.0",
+    "bootstrap-vue": "^2.0.0-rc.27",
+    "itee-utils": "^5.0.1",
+    "itee-validators": "^5.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "stats.js": "^0.17.0",
@@ -48,6 +74,12 @@
     "vue-resize-directive": "^1.2.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/commit-analyzer": "^6.2.0",
+    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/github": "^5.4.2",
+    "@semantic-release/npm": "^5.1.13",
+    "@semantic-release/release-notes-generator": "^7.2.1",
     "ansi-colors": "^4.1.1",
     "benchmark": "^2.1.4",
     "chai": "^4.2.0",
@@ -60,7 +92,6 @@
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
     "gulp-jsdoc3": "^2.0.0",
-    "itee-validators": "^4.0.0",
     "karma": "^4.2.0",
     "karma-benchmark": "^1.0.4",
     "karma-benchmarkjs-reporter": "^1.0.0",
@@ -75,13 +106,11 @@
     "mocha": "^6.2.0",
     "mochawesome": "^4.0.1",
     "rollup": "^1.18.0",
-    "rollup-plugin-commonjs": "^10.0.1",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-re": "^1.0.7",
-    "rollup-plugin-uglify-es": "0.0.1"
+    "rollup-plugin-terser": "^5.1.1"
   },
+  "optionalDependencies": {},
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
