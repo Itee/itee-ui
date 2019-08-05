@@ -25,14 +25,20 @@ function CreateEslintConfiguration () {
             'BigUint64Array': 'readonly'
         },
         parserOptions: {
-            ecmaVersion: 2018,
-            sourceType:  'module'
+            ecmaVersion:  2018,
+            sourceType:   'module',
+            ecmaFeatures: {
+                jsx: true
+            }
         },
         extends: [
-            'eslint:recommended'
+            'eslint:recommended',
+            'plugin:vue/essential'
         ],
         plugins: [
-            'mocha'
+            'mocha',
+            'react',
+            'vue'
         ],
         rules: {
             'no-multiple-empty-lines':  [ 1, { 'max': 2 } ],
@@ -42,8 +48,10 @@ function CreateEslintConfiguration () {
             'no-multi-spaces':          [
                 'error', {
                     exceptions: {
-                        'ImportDeclaration':  true,
-                        'VariableDeclarator': true
+                        'Property':             true,
+                        'ImportDeclaration':    true,
+                        'VariableDeclarator':   true,
+                        'AssignmentExpression': true
                     }
                 }
             ],
@@ -55,8 +63,9 @@ function CreateEslintConfiguration () {
                         'on':          'value'
                     }
                 }
-            ]
-
+            ],
+            'react/jsx-uses-react': 'error',
+            'react/jsx-uses-vars':  'error'
         }
     }
 
