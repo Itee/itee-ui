@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/Itee/itee-ui/compare/v1.0.0...v1.1.0) (2019-08-12)
+
+
+### Bug Fixes
+
+* **dockspawn:** fix lint errors ([2693b0d](https://github.com/Itee/itee-ui/commit/2693b0d))
+
+
+### Features
+
+* **docs:** add docs to github ([a132c33](https://github.com/Itee/itee-ui/commit/a132c33))
+
 # 1.0.0 (2019-08-05)
 
 
