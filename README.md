@@ -1,13 +1,24 @@
-[![Build Status](https://travis-ci.org/Itee/itee-ui.svg?branch=master)](https://travis-ci.org/Itee/itee-ui)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-___
 
-# <center>[Itee UI]</center>
+<h1 align="center">[Itee UI]</h1>
+<br>
 
-The itee ui contain all stuff related to client view. It contain a react plugin, and a vue plugin.
+<p align="center">The itee ui contain all stuff related to client view. It contain a react plugin, and a vue plugin.</p>
+<br>
 
+<p align="center">
+    <a href="https://www.npmjs.com/package/itee-ui">
+        <img src="https://img.shields.io/npm/v/itee-ui" alt="Current package version">
+    </a>
+    <a href="https://travis-ci.org/Itee/itee-ui">
+        <img src="https://travis-ci.org/Itee/itee-ui.svg?branch=master" alt="Build status">
+    </a>
+    <a href="https://github.com/semantic-release/semantic-release">
+        <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Build status">
+    </a>
+</p>
 
-## How to install
+<br>
+<h2>How to install</h2>
 
 From npm:
 
@@ -19,9 +30,12 @@ If you want to build the repository from source follow these instructions:
     npm install
     npm run build
         
-## How to use
+<br>   
+<h2>How to use</h2>
 
-First of all, you should take a look to the documentation ! In case you have clone the repository you could auto-generate the library documentation using: 
+<p align="center">At begin was <a href="https://itee.github.io/itee-ui/">RTFM</a> !</p>
+<br>
+In case you have clone the repository you could also auto-generate the library documentation using: 
 
     npm run doc
 
@@ -32,7 +46,8 @@ then you will be able to use like this:
     
     const clientApp = new Vue( TDialog ).$mount( '#itee-application-root' )
 
-## License (BSD-3-Clause)
+<br>
+<h2>License (BSD-3-Clause)</h2>
 
 **Copyright (c) 2015-Present, Itee, Valcke Tristan [https://github.com/Itee](https://github.com/Itee). All rights reserved.**
 
