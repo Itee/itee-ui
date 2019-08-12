@@ -22,14 +22,14 @@ function CreateJsdocConfiguration () {
         'source': {
             'include':        [ 'README.md' ],
             'includePattern': '.+\\.js(doc|x)?$',
-            'excludePattern': '(node_modules|documentation|builds|tests)'
+            'excludePattern': '(node_modules|docs|builds|tests)'
         },
         'sourceType':   'module',
         'plugins':      [],
         'recurseDepth': 2,
         'opts':         {
             'encoding':    'utf8',
-            'destination': './documentation/API/',
+            'destination': './docs/',
             'recurse':     true,
             'verbose':     true,
             'private':     true

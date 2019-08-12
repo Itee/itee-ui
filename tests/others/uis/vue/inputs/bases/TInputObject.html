@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TInputObject</title>
+		<!--<link rel='stylesheet' type='text/css' href="../../../../../builds/itee-client.style.js"></link>-->
+		<link rel='stylesheet' type='text/css' href="../../../../../styles/bootstrap.css"></link>
+		<style>
+			body {
+				display: flex;
+				width:   100vw;
+				height:  100vh;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+			.input-group-text input[type=color] {
+				width:            30px;
+				height:           30px;
+				padding:          0;
+				margin:           -15px 0;
+				background-color: #e9ecef;
+				border:           none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="itee-application-root"></div>
+
+		<script src="../../../../../builds/itee-client.iife.js"></script>
+		<script>
+
+            Itee.startApp(
+                {
+                    el:       '#itee-application-root',
+                    data:     {
+                        myObject: {
+                            myNull:          null,
+                            myUndefined:     undefined,
+//                            myBool:          true,
+//                            myText:          'foo',
+//                            myNumber:        123,
+//                            myArrayOfString: [ 'foo', 'bar', 'baz' ],
+//                            myArrayOfNumber: [ 1, 2, 3 ],
+//                            mySubObject:     {
+//                                mySubBool:          true,
+//                                mySubText:          'bar',
+//                                mySubNumber:        456,
+//                                mySubArrayOfString: [ 'qux', 'qar', 'qaz' ],
+//                                myDeepObject:       {
+//                                    myDeepBool:          true,
+//                                    myDeepText:          'Deep',
+//                                    myDeepNumber:        789,
+//                                    myDeepArrayOfString: [ 'qux', 'qar', 'qaz' ]
+//                                }
+//                            },
+//                            myVector3:       new Itee.Vector3( 1.23, 4.56, 7.89 ),
+//                            myMatrix4:       new Itee.Matrix4()
+                        }
+                    },
+                    template: `
+	                    <TContainer orientation="vertical" vAlign="center" hAlign="stretch" expand=true>
+	                        <TContainer orientation="horizontal" vAlign="stretch" hAlign="stretch">
+
+								<TContainer class="container" orientation="vertical" vAlign="center" hAlign="center">
+									<TInputObject label="My big object" :value="myObject" :onChange=onChangeHandler />
+								</TContainer>
+
+					        </TContainer>
+				        </TContainer>
+				    `,
+                    methods:  {
+
+                        onChangeHandler ( key, value ) {
+
+                            let _key     = key
+                            let _value   = value
+                            let _element = this.myObject
+
+                            // Care: the order of assignement is important here !
+                            while ( _value.key ) {
+                                _element = _element[ _key ]
+                                _key     = _value.key
+                                _value   = _value.value
+                            }
+
+                            _element[ _key ] = _value
+
+                        }
+
+                    }
+                }
+            )
+
+		</script>
+	</body>
+</html>

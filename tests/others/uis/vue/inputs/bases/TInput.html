@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TInput</title>
+		<!--<link rel='stylesheet' type='text/css' href="../../../../../builds/itee-client.style.js"></link>-->
+		<link rel='stylesheet' type='text/css' href="../../../../../styles/bootstrap.css"></link>
+		<style>
+			body {
+				display: flex;
+				width:   100vw;
+				height:  100vh;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+			.item {
+				display: flex;
+				border:  1px solid black;
+			}
+
+			.input-group-text input[type=color] {
+				width:            30px;
+				height:           30px;
+				padding:          0;
+				margin:           -15px 0;
+				background-color: #e9ecef;
+				border:           none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="itee-application-root"></div>
+
+		<script src="../../../../../builds/itee-client.iife.js"></script>
+		<script>
+
+            Itee.startApp(
+                {
+                    el:       '#itee-application-root',
+                    data:     {
+                        inputs: [
+                            {
+                                label: 'myBool',
+                                value: true
+                            },
+                            {
+                                label: 'myText',
+                                value: 'bar'
+                            },
+                            {
+                                label: 'myNumber',
+                                value: 123
+                            },
+                            {
+                                _type: 'color',
+                                label: 'myColor',
+                                value: '#ad00be'
+                            },
+                            {
+                                _type: 'range',
+                                label: 'myRange',
+                                min:   20,
+                                max:   45,
+                                step:  1,
+                                value: 36
+                            },
+                            {
+                                _type:       'file',
+                                label:       'myFile',
+                                placeholder: 'This is my placeholder',
+                                value:       undefined
+                            },
+                            {
+                                label: 'myArrayOfString',
+                                value: [ 'foo', 'bar', 'baz' ]
+                            },
+                            {
+                                label: 'myArrayOfNumber',
+                                value: [ 1, 2, 3 ]
+                            },
+                            {
+                                label: 'myObject',
+                                value: {
+                                    mySubBool:          true,
+                                    mySubText:          'bar',
+                                    mySubNumber:        456,
+                                    mySubArrayOfString: [ 'qux', 'qar', 'qaz' ]
+                                }
+                            }
+                        ]
+                    },
+                    template: `
+	                    <TContainer orientation="vertical" vAlign="center" hAlign="stretch" expand=true>
+	                        <TContainer orientation="horizontal" vAlign="stretch" hAlign="stretch">
+
+								<TContainer class="container" orientation="vertical" vAlign="start" hAlign="center">
+									<TInput v-for="(input, index) in inputs" :key=index :data=input :onChange="function(newValue){onChangeHandler(index, newValue)}" />
+								</TContainer>
+
+					        </TContainer>
+				        </TContainer>
+				    `,
+                    methods:  {
+
+                        onChangeHandler ( index, value ) {
+
+                            const _arguments = arguments
+
+                            if ( typeof value === 'object' ) {
+                                this.inputs[ index ].value[ value.key ] = value.value
+                            } else {
+                                this.inputs[ index ].value = value
+                            }
+
+                        }
+
+                    }
+                }
+            )
+
+		</script>
+	</body>
+</html>

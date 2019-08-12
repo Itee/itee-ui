@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Vue</title>
+		<link rel="stylesheet" type="text/css" href="../../builds/itee-client.style.css">
+		<style>
+
+			#app {
+				display: flex;
+				width: 100%;
+				height: 100%;
+			}
+
+			.red {
+				background-color: indianred;
+			}
+
+			.green {
+				background-color: limegreen;
+			}
+
+			.blue {
+				background-color: dodgerblue;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<router-view></router-view>
+		</div>
+
+		<script src="../../builds/itee-client.iife.js"></script>
+		<script src="./VueRouterConfig.js"></script>
+		<script>
+
+            const rawMaterial  = Itee.getRawMaterial()
+			Itee.startApp( rawMaterial )
+
+		</script>
+	</body>
+</html>

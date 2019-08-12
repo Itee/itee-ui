@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TViewport3D</title>
+		<link rel='stylesheet' type='text/css' href="../../../../../styles/bootstrap.css"></link>
+		<link rel='stylesheet' type='text/css' href="../../../../../builds/itee-client.style.css"></link>
+		<style>
+			html, body, div, canvas {
+				margin:  0;
+				padding: 0;
+			}
+
+			body {
+				display: flex;
+				width:   100vw;
+				height:  100vh;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="itee-application-root"></div>
+
+		<script src="../../../../../builds/itee-client.iife.js"></script>
+		<script>
+
+            /* global Itee */
+
+            Itee.startApp(
+                {
+                    el:       '#itee-application-root',
+                    template: `
+	                    <TContainer orientation="vertical" vAlign="start" hAlign="stretch" expand=true>
+
+	                            <TToolBar style="height: 60px;">
+                                    <TToolItem icon="plus" tooltip="Sélection" :onClick=addObjectsToViewportScene />
+                                    <TToolItem icon="upload" tooltip="Importer des fichiers" :onClick="onToggleModalVisibility" :onClickData="'inputFileModal'" />
+                                    <TToolItem icon="edit" tooltip="Sélection" :onClick=updateObjectsOfViewportScene />
+                                    <TToolItem icon="minus" tooltip="Sélection" :onClick=removeObjectsFromViewportScene />
+
+	                                <TDivider orientation="vertical" />
+
+						            <TToolDropDown popAt="bottomLeft" tooltip="Choisir le type de projection de la camera" icon="camera">
+                                        <TToolItem icon="times" label="Aucun" tooltip="..." :onClick=setViewportCameraOfType onClickData="none" />
+                                        <TToolItem icon="th" label="Tableaux de caméras" :onClick=setViewportCameraOfType onClickData="array" />
+						                <TToolItem icon="video" label="Cinématique" :onClick=setViewportCameraOfType onClickData="cinematic" />
+						                <TToolItem icon="cube" label="Cubique" :onClick=setViewportCameraOfType onClickData="cube" />
+						                <TToolItem icon="cubes" label="Orthographique" :onClick=setViewportCameraOfType onClickData="orthographic" />
+						                <TToolItem :icon="['fab', 'linode']" label="Perspective" :onClick=setViewportCameraOfType onClickData="perspective" />
+						            </TToolDropDown>
+
+						            <TToolDropDown popAt="bottomLeft" tooltip="Choisir le type de contrôle de caméra" icon="gamepad">
+                                        <TToolItem icon="times" label="Aucun" tooltip="..." :onClick=setViewportControlOfType onClickData="none" />
+                                        <TToolItem icon="tablet-alt" label="Device" tooltip="Permet de..." :onClick=setViewportControlOfType onClickData="deviceorientation" />
+						                <TToolItem icon="hand-rock" label="Drag" tooltip="Permet de..." :onClick=setViewportControlOfType onClickData="drag" />
+						                <TToolItem icon="edit" label="Editor" tooltip="Permet de..." :onClick=setViewportControlOfType onClickData="editor" />
+						                <TToolItem icon="smile" label="Première personne" tooltip="Permet de..." :onClick=setViewportControlOfType onClickData="firstperson" />
+						                <TToolItem icon="fighter-jet" label="Vol libre" tooltip="Permet de..." :onClick=setViewportControlOfType onClickData="fly" />
+						                <TToolItem icon="globe" label="Orbital" tooltip="Permet de se déplacer en mode orbital autour du model 3D" :onClick=setViewportControlOfType onClickData="orbit" />
+						                <TToolItem icon="cubes" label="Orthographique trackball" tooltip="Permet de..." :onClick=setViewportControlOfType onClickData="orthographictrackball" />
+						                <TToolItem icon="street-view" label="Avatar" tooltip="Permet de se déplacer en mode immersif dans le model 3D" :onClick=setViewportControlOfType onClickData="pointerlock" />
+						                <TToolItem :icon="{icon:['fab', 'quinscape']}" label="Trackball" tooltip="Permet de se déplacer en mode immersif dans le model 3D" :onClick=setViewportControlOfType onClickData="trackball" />
+						                <TToolItem icon="recycle" label="Transformation" tooltip="Permet de se déplacer en mode immersif dans le model 3D" :onClick=setViewportControlOfType onClickData="transform" />
+						                <TToolItem :icon="{icon:['fab', 'simplybuilt'], flip: 'vertical'}" label="Realité Virtuel" tooltip="Permet de se déplacer en mode immersif dans le model 3D" :onClick=setViewportControlOfType onClickData="vr" />
+						            </TToolDropDown>
+
+						            <TToolDropDown popAt="bottomLeft" tooltip="Choisir un effet de camera" icon="eye">
+						                <TToolItem icon="times" label="Aucun" tooltip="Vision de base" :onClick=setViewportEffectOfType onClickData="none" />
+						                <TToolItem :icon="['fab', 'nintendo-switch']" label="Anaglyphe" tooltip="Anaglyphe" :onClick=setViewportEffectOfType onClickData="anaglyph" />
+						                <TToolItem :icon="['fab', 'autoprefixer']" label="ASCII" tooltip="Effet de caractère" :onClick=setViewportEffectOfType onClickData="ascii" />
+						                <TToolItem icon="unlink" label="Outline" tooltip="Effet de caractère" :onClick=setViewportEffectOfType onClickData="outline" />
+						                <TToolItem :icon="{icon:'barcode', rotate: '90'}" label="Parallax" tooltip="Effet de caractère" :onClick=setViewportEffectOfType onClickData="parallaxbarrier" />
+						                <TToolItem icon="th-large" label="Peppers Ghost" tooltip="Effet de caractère" :onClick=setViewportEffectOfType onClickData="peppersghost" />
+						                <TToolItem icon="adjust" label="Stereo" tooltip="Effet stereo pour google cardboard" :onClick=setViewportEffectOfType onClickData="stereo" />
+						                <TToolItem :icon="{icon:['fab', 'simplybuilt'], flip: 'vertical'}" label="VR" tooltip="VR" :onClick=setViewportEffectOfType onClickData="vr" />
+						            </TToolDropDown>
+
+						            <TToolDropDown popAt="bottomLeft" tooltip="Choisir un moteur de rendu 3d" icon="cogs">
+						                <TToolItem icon="cubes" label="Classique" :onClick=setViewportRendererOfType onClickData="classic" />
+						            </TToolDropDown>
+
+						            <TDivider orientation="vertical" />
+
+						            <TToolItem icon="chart-bar" tooltip="Afficher les statistiques webgl" :onClick=toggleViewportStats />
+						            <TToolItem icon="recycle" tooltip="Activer/Désactivé la mise à jours automatique du viewport" :onClick=toggleViewportAutoUpdate />
+						            <input type="color" value="#ff0000" v-on:change="setViewportBackgroundColor">
+						            <TToolItem icon="sun" tooltip="Activer/Désactiver les ombres" :onClick=toggleViewportShadow />
+                                    <TToolItem icon="hand-pointer" tooltip="Activer/Désactiver la sélection" :onClick=setSelectionMode />
+                                    <TToolItem icon="hand-pointer" tooltip="Activer/Désactiver la sélection" :onClick=setClippingSelectionMode />
+
+						        </TToolBar>
+
+	                        <TContainer orientation="vertical" vAlign="stretch" hAlign="stretch" expand=true overflowY="hidden">
+		                        <TViewport3D
+		                            v-bind="viewport"
+	                                v-on:intersect=onIntersect
+	                                v-on:select=onSelect
+	                                v-on:deselect=onDeselect
+	                                v-on:cacheUpdated="viewport.cacheNeedUpdate = false"
+					             />
+					        </TContainer>
+
+							<div v-on:click="onToggleModalVisibility('inputFileModal')" id="inputFileModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+							    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							        <div v-on:click.stop class="modal-content">
+							            <div class="modal-header">
+							                <h5 class="modal-title" id="exampleModalLongTitle">{{inputFileModal.title}}</h5>
+							                <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click.stop="onToggleModalVisibility('inputFileModal')">
+							                    <span aria-hidden="true">&times;</span>
+							                </button>
+							            </div>
+							            <div class="modal-body">
+
+											<TInputFile :onChange=setFileInputModel />
+
+							            </div>
+							            <div class="modal-footer">
+							                <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.stop="onToggleModalVisibility('inputFileModal')">Fermer</button>
+							                <button type="button" class="btn btn-primary" v-on:click.stop="importFilesToViewportScene">Valider</button>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+
+				        </TContainer>
+				    `,
+                    data:     {
+                        action:         'none',
+                        // Viewport
+                        viewport:       {
+                            scene:           new Itee.Scene(),
+                            camera:          {
+                                type:     'perspective',
+                                position: {
+                                    x: 70,
+                                    y: 20,
+                                    z: 50
+                                },
+                                target:   {
+                                    x: 0,
+                                    y: 0,
+                                    z: 0
+                                }
+                            },
+                            control:         'orbit',
+                            effect:          'none',
+                            renderer:        undefined,
+                            showStats:       true,
+                            autoUpdate:      true,
+                            backgroundColor: 0x000000,
+                            enableShadow:    false,
+                            isRaycastable:   false,
+                            allowDecimate:   true,
+                            fitCamera:       false,
+                            cacheNeedUpdate:         false
+                        },
+                        intersected:    {
+                            object:           undefined,
+                            originalMaterial: undefined
+                        },
+                        selected:       {
+                            object:           undefined,
+                            originalMaterial: undefined
+                        },
+                        pointer:        undefined,
+                        // File
+                        inputFileModal: {
+                            title:  'Importer un fichier utilisateur dans la vue 3d',
+                            inputs: {
+                                files: undefined
+                            }
+                        }
+                    },
+                    methods:  {
+
+                        // GLOBALS
+
+                        _createEnvironement () {
+
+                            ///////////////////
+                            // Add Env group //
+                            ///////////////////
+                            const envGroup = new Itee.Group()
+                            envGroup.name  = "Environement"
+                            this.viewport.scene.add( envGroup )
+
+                            ///////////////
+                            // Add light //
+                            ///////////////
+                            const lightGroup = new Itee.Group()
+                            lightGroup.name  = "Lumières"
+                            envGroup.add( lightGroup )
+
+                            const ambiantLight = new Itee.AmbientLight( 0xC8C8C8 )
+                            lightGroup.add( ambiantLight )
+
+                            //                        const SHADOW_MAP_SIZE = 16384
+                            //                        const spotLight       = new Itee.SpotLight( 0xffffff, 1, 0, Math.PI / 2 )
+                            //                        spotLight.position.set( 0, 1500, 1000 )
+                            //                        spotLight.target.position.set( 0, 0, 0 )
+                            //                        spotLight.castShadow            = true
+                            //                        spotLight.shadow                = new Itee.LightShadow( new Itee.PerspectiveCamera( 50, 1, 1200, 2500 ) )
+                            //                        spotLight.shadow.bias           = 0.0001
+                            //                        spotLight.shadow.mapSize.width  = SHADOW_MAP_SIZE
+                            //                        spotLight.shadow.mapSize.height = SHADOW_MAP_SIZE
+                            //                        envGroup.add( spotLight )
+
+                            const frustum  = 500
+                            const mapSize  = 2048
+                            const dirLight = new Itee.DirectionalLight( 0xaaaaaa, 0.6 )
+                            dirLight.position.set( 100, 300, 100 )
+                            //                        dirLight.castShadow            = true
+                            //                        dirLight.shadow.mapSize.width  = mapSize
+                            //                        dirLight.shadow.mapSize.height = mapSize
+                            //                        dirLight.shadow.darkness       = 1
+                            //                        dirLight.shadow.camera.left    = -frustum
+                            //                        dirLight.shadow.camera.right   = frustum
+                            //                        dirLight.shadow.camera.top     = frustum
+                            //                        dirLight.shadow.camera.bottom  = -frustum
+                            //                        dirLight.shadow.camera.near    = 1
+                            //                        dirLight.shadow.camera.far     = 500
+                            envGroup.add( dirLight )
+
+                            //                        const dirLightHelper = new Itee.DirectionalLightHelper( dirLight, 10 )
+                            //                        envGroup.add( dirLightHelper )
+                            //
+                            //                        //Create a helper for the shadow camera
+                            //                        const dirLightShadowCameraHelper = new Itee.CameraHelper( dirLight.shadow.camera )
+                            //                        envGroup.add( dirLightShadowCameraHelper )
+
+                            ///////////////
+                            // Add grids //
+                            ///////////////
+                            const gridGroup = new Itee.Group()
+                            gridGroup.name  = "Grilles"
+                            envGroup.add( gridGroup )
+
+                            /// XZ
+
+                            const gridHelperXZ_1 = new Itee.GridHelper( 20, 20 )
+                            gridHelperXZ_1.name  = "Grille XZ - Mètrique"
+                            gridGroup.add( gridHelperXZ_1 )
+
+                            const gridHelperXZ_10 = new Itee.GridHelper( 200, 20 )
+                            gridHelperXZ_10.name  = "Grille XZ - Décamètrique"
+                            gridGroup.add( gridHelperXZ_10 )
+
+                            const gridHelperXZ_100 = new Itee.GridHelper( 2000, 20 )
+                            gridHelperXZ_100.name  = "Grille XZ - Hectomètrique"
+                            gridGroup.add( gridHelperXZ_100 )
+
+                            /// XY
+
+                            //                        const gridHelperXY_1 = new Itee.GridHelper( 20, 20 )
+                            //                        gridHelperXY_1.name  = "Grille XY - Mètrique"
+                            //                        gridHelperXY_1.rotateX( Itee.degreesToRadians( 90 ) )
+                            //                        gridGroup.add( gridHelperXY_1 )
+                            //
+                            //                        const gridHelperXY_10 = new Itee.GridHelper( 200, 20 )
+                            //                        gridHelperXY_10.name  = "Grille XY - Décamètrique"
+                            //                        gridHelperXY_10.rotateX( Itee.degreesToRadians( 90 ) )
+                            //                        gridGroup.add( gridHelperXY_10 )
+                            //
+                            //                        const gridHelperXY_100 = new Itee.GridHelper( 2000, 20 )
+                            //                        gridHelperXY_100.name  = "Grille XY - Hectomètrique"
+                            //                        gridHelperXY_100.rotateX( Itee.degreesToRadians( 90 ) )
+                            //                        gridGroup.add( gridHelperXY_100 )
+
+                            /// YZ
+
+                            //                        const gridHelperYZ_1 = new Itee.GridHelper( 20, 20 )
+                            //                        gridHelperYZ_1.name  = "Grille YZ - Mètrique"
+                            //                        gridHelperYZ_1.rotateZ( Itee.degreesToRadians( 90 ) )
+                            //                        gridGroup.add( gridHelperYZ_1 )
+                            //
+                            //                        const gridHelperYZ_10 = new Itee.GridHelper( 200, 20 )
+                            //                        gridHelperYZ_10.name  = "Grille YZ - Décamètrique"
+                            //                        gridHelperYZ_10.rotateZ( Itee.degreesToRadians( 90 ) )
+                            //                        gridGroup.add( gridHelperYZ_10 )
+                            //
+                            //                        const gridHelperYZ_100 = new Itee.GridHelper( 2000, 20 )
+                            //                        gridHelperYZ_100.name  = "Grille YZ - Hectomètrique"
+                            //                        gridHelperYZ_100.rotateZ( Itee.degreesToRadians( 90 ) )
+                            //                        gridGroup.add( gridHelperYZ_100 )
+
+                            //////////////////
+                            // Add pointers //
+                            //////////////////
+                            const pointersGroup = new Itee.Group()
+                            pointersGroup.name  = "Pointers"
+                            envGroup.add( pointersGroup )
+
+                            const sphereGeometry = new Itee.SphereBufferGeometry( 0.5, 32, 32 )
+                            const sphereMaterial = new Itee.MeshPhongMaterial( { color: 0xffff00 } )
+                            const sphere         = new Itee.Mesh( sphereGeometry, sphereMaterial )
+                            sphere.name          = 'Sphère'
+                            sphere.visible       = false
+                            sphere.isRaycastable = false
+                            pointersGroup.add( sphere )
+
+                            // Plane
+                            const planeGeometry = new Itee.PlaneGeometry( 2, 2, 10, 10 )
+                            const planeMaterial = new Itee.MeshBasicMaterial( {
+                                color:       0x000000,
+                                side:        Itee.DoubleSide,
+                                opacity:     0.2,
+                                transparent: true
+                            } )
+                            const plane         = new Itee.Mesh( planeGeometry, planeMaterial )
+                            plane.name          = 'Plan'
+                            plane.visible       = false
+                            plane.isRaycastable = false
+                            pointersGroup.add( plane )
+
+                        },
+
+                        _fetchData () {
+
+                            const datasGroup = new Itee.Group()
+                            datasGroup.name  = "Données"
+                            this.viewport.scene.add( datasGroup )
+
+                            ///////////////
+                            // Add cubes //
+                            ///////////////
+                            const cubesGroup = new Itee.Group()
+                            cubesGroup.name  = "Cubes"
+                            datasGroup.add( cubesGroup )
+
+                            const numberOfCubes = 1000
+                            const spreadArea    = 100
+                            for ( let cubeIndex = 0 ; cubeIndex < numberOfCubes ; cubeIndex++ ) {
+
+                                const width    = Itee.getRandomInt( 0, 7 )
+                                const height   = Itee.getRandomInt( 0, 7 )
+                                const depth    = Itee.getRandomInt( 0, 7 )
+                                const geometry = new Itee.BoxGeometry( width, height, depth )
+
+                                const color    = Itee.getRandomInt( 0, 16777216 )
+                                const material = new Itee.MeshPhongMaterial( { color } )
+
+                                const x            = Itee.getRandomInt( -spreadArea, spreadArea )
+                                const y            = Itee.getRandomInt( -spreadArea, spreadArea )
+                                const z            = Itee.getRandomInt( -spreadArea, spreadArea )
+                                const cube         = new Itee.Mesh( geometry, material )
+                                cube.isRaycastable = true
+                                cube.position.x    = x
+                                cube.position.y    = y
+                                cube.position.z    = z
+
+                                cubesGroup.add( cube )
+
+                            }
+
+                            //////////////
+
+                            const modifiersGroup = new Itee.Group()
+                            modifiersGroup.name  = "Modificateurs"
+                            this.viewport.scene.add( modifiersGroup )
+
+                        },
+
+                        // FILES
+
+                        addObjectsToViewportScene () {},
+
+                        resetFileInputLabel ( clickEvent ) {
+                            'use strict'
+
+                            clickEvent.target.value = ''
+
+                        },
+
+                        setFileInputModel ( files ) {
+
+                            this.$data.inputFileModal.inputs.files = files
+
+                        },
+
+                        importFilesToViewportScene ( changeEvent ) {
+                            'use strict'
+                            console.log( 'importFilesToViewportScene' )
+
+                            const self     = this
+                            const fileList = this.$data.inputFileModal.inputs.files
+
+                            this.onToggleModalVisibility( 'inputFileModal' )
+
+                            if ( !fileList ) { return }
+
+                            const universalLoader = new Itee.TUniversalLoader()
+
+                            universalLoader.load(
+                                fileList,
+                                ( data ) => {
+
+                                    data.traverse( object => {
+                                        if ( object.isMesh ) {
+                                            object.isRaycastable = true
+                                            object.geometry.computeFaceNormals()
+                                            object.geometry.computeVertexNormals()
+                                            //                                            object.castShadow    = true        //default is false
+                                            //                                            object.receiveShadow = true     //default is false
+                                        }
+                                    } )
+
+                                    const dataGroup = self.viewport.scene.getObjectByName( 'Données' )
+                                    dataGroup.add( data )
+
+                                    self.viewport.isDirty = true
+
+                                },
+                                ( progress ) => {
+
+                                    console.log( progress )
+
+                                },
+                                ( error ) => {
+
+                                    console.error( error )
+
+                                },
+                            )
+
+                        },
+
+                        updateObjectsOfViewportScene () {
+                            'use strict'
+                            console.log( 'updateObjectsOfViewportScene' )
+                        },
+
+                        removeObjectsFromViewportScene () {
+                            'use strict'
+
+                            let dataGroup = this.viewport.scene.getObjectByName( 'Données' )
+
+                            for ( let childIndex = 0, numChildren = dataGroup.children.length ; childIndex < numChildren ; childIndex++ ) {
+                                let child = dataGroup.children[ childIndex ]
+                                dataGroup.remove( child )
+                            }
+
+                        },
+
+                        //// Modal
+
+                        onToggleModalVisibility ( modalId ) {
+                            'use strict'
+
+                            console.log( 'onToggleModalVisibility' )
+
+                            const modal = document.getElementById( modalId )
+                            if ( modal ) {
+
+                                if ( modal.className === 'modal fade' ) {
+                                    modal.className             = 'modal fade show'
+                                    modal.style.display         = 'block'
+                                    modal.style.backgroundColor = '#f9f9f980'
+                                } else {
+                                    modal.className     = 'modal fade'
+                                    modal.style.display = 'none'
+                                }
+
+                            }
+
+                        },
+
+                        ////
+
+                        setViewportCameraOfType ( cameraType ) {
+                            'use strict'
+                            console.log( 'setViewportCameraOfType' )
+
+                            const camera   = this.viewport.camera
+                            const position = camera.position
+                            const target   = camera.target
+
+                            this.viewport.camera = {
+                                type:     cameraType,
+                                position: position,
+                                target:   target
+                            }
+
+                        },
+
+                        setViewportControlOfType ( controlType ) {
+                            'use strict'
+                            console.log( 'setViewportControlOfType' )
+
+                            this.viewport.control = controlType
+
+                        },
+
+                        setViewportEffectOfType ( effectType ) {
+                            'use strict'
+                            console.log( 'setViewportEffectOfType' )
+
+                            this.viewport.effect = effectType
+
+                        },
+
+                        setViewportRendererOfType ( rendererType ) {
+                            'use strict'
+                            console.log( 'setViewportRendererOfType' )
+
+                            this.viewport.renderer = rendererType
+
+                        },
+
+                        toggleViewportStats () {
+                            'use strict'
+                            console.log( 'toggleViewportStats' )
+
+                            this.viewport.showStats = !this.viewport.showStats
+
+                        },
+
+                        toggleViewportAutoUpdate () {
+                            'use strict'
+                            console.log( 'toggleViewportAutoUpdate' )
+
+                            this.viewport.autoUpdate = !this.viewport.autoUpdate
+
+                        },
+
+                        setViewportBackgroundColor ( colorEvent ) {
+                            'use strict'
+                            console.log( 'setViewportBackgroundColor' )
+
+                            const hexaStringColor         = colorEvent.target.value
+                            const hexaIntColor            = parseInt( hexaStringColor.replace( '#', '0x' ) )
+                            this.viewport.backgroundColor = hexaIntColor
+
+                        },
+
+                        toggleViewportShadow () {
+                            'use strict'
+                            console.log( 'toggleViewportShadow' )
+
+                            this.viewport.enableShadow = !this.viewport.enableShadow
+
+                        },
+
+                        setSelectionMode () {
+                            'use strict'
+
+                            this.action                 = 'selection'
+                            this.pointer                = this.viewport.scene.getObjectByName( 'Environement' ).getObjectByName( 'Pointers' ).getObjectByName( 'Sphère' )
+                            this.viewport.isRaycastable = !this.viewport.isRaycastable
+                        },
+
+                        setClippingSelectionMode () {
+                            'use strict'
+
+                            this.action                 = 'clippingSelection'
+                            this.pointer                = this.viewport.scene.getObjectByName( 'Environement' ).getObjectByName( 'Pointers' ).getObjectByName( 'Plan' )
+                            this.viewport.isRaycastable = !this.viewport.isRaycastable
+                        },
+
+                        // Listener
+
+                        onIntersect ( intersect ) {
+
+                            if ( intersect ) {
+
+                                this._activePointer()
+                                this._updatePointer( intersect.point, intersect.face )
+                                this._updateIntersected( intersect.object )
+
+                            } else {
+
+                                this._disablePointer()
+                                this._clearPreviousIntersected()
+
+                            }
+
+                        },
+
+                        onSelect ( intersect ) {
+
+                            if ( intersect ) {
+
+                                switch ( this.action ) {
+
+                                    case 'selection':
+                                        this._updateSelected( intersect.object )
+                                        break
+
+                                    case 'clippingSelection':
+                                        this._addClippingPlan( intersect.point, intersect.face )
+                                        break
+
+                                    default:
+                                        throw new RangeError( `Invalid action: ${this.action}` )
+                                        break
+
+                                }
+
+                            } else {
+
+                            }
+
+                        },
+
+                        onDeselect () {
+
+                            if ( !this.selected.object ) { return }
+
+                            if ( this.selected.object.material ) {
+
+                                this._resetOriginalMaterialOf( this.selected )
+
+                            }
+
+                            this._releaseReferenceFrom( this.selected )
+
+                        },
+
+                        _activePointer () {
+
+                            if ( !this.pointer ) {
+                                return
+                            }
+
+                            this.pointer.visible = true
+
+                        },
+
+                        _updatePointer ( point, face ) {
+
+                            if ( !this.pointer || !point ) {
+                                return
+                            }
+
+                            //Todo: scale sphere in squared distance to intersect origin and camera position
+                            if ( this.pointer.name === 'Plan' ) {
+
+                                //                                const arrowHelper = new Itee.ArrowHelper( face.normal, point, 1, 0x123456 )
+                                //                                this.viewport.scene.add( arrowHelper )
+
+                                const direction       = new Itee.Vector3().addVectors( point, face.normal )
+                                const div             = direction.clone().normalize().divideScalar( 10 )
+                                const offsetPosition  = point.clone().add( div )
+                                const offsetDirection = direction.clone().add( div )
+                                this.pointer.position.set( offsetPosition.x, offsetPosition.y, offsetPosition.z )
+                                this.pointer.lookAt( offsetDirection )
+                                //                                this.pointer.position.set( point.x, point.y, point.z )
+                                //                                this.pointer.lookAt( direction )
+                                //                                this.pointer.rotateX(Itee.degreesToRadians(90))
+
+                            } else {
+                                this.pointer.position.set( point.x, point.y, point.z )
+                            }
+
+                        },
+
+                        _disablePointer () {
+
+                            if ( !this.pointer ) {
+                                return
+                            }
+
+                            this.pointer.visible = false
+
+                        },
+
+                        _addClippingPlan ( point, face ) {
+
+                            const normal = face.normal.clone()
+//                            const normal = face.normal.clone().negate()
+                            const subClippinPlane     = new Itee.Plane( normal, 0 )
+
+                            let projectedPoint = new Itee.Vector3( 0, 0, 0 )
+                            subClippinPlane.projectPoint ( point, projectedPoint )
+
+	                        const orthogonalDistanceToOrigin = point.distanceTo(projectedPoint) + 0.1
+
+                            const clippinPlane     = new Itee.Plane( face.normal, -orthogonalDistanceToOrigin )
+
+//                            const direction       = new Itee.Vector3().addVectors( point, face.normal ).normalize()
+//                            const distanceToOrigin = point.distanceTo( new Itee.Vector3( 0, 0, 0 ) )
+//                            const clippinPlane     = new Itee.Plane( direction, distanceToOrigin )
+
+                            //                            const modifierGroup = this.viewport.scene.getObjectByName( 'Modificateurs' )
+                            //                            modifierGroup.add(clippinPlane)
+
+                            this.viewport.renderer.clippingPlanes.push( clippinPlane )
+
+                        },
+
+                        _updateIntersected ( object ) {
+
+                            if ( !object || (object.type === 'Group' || object.type === 'Scene') ) {
+                                return
+                            }
+
+                            if ( !this.intersected.object ) {
+
+                                this._keepReferenceOf( object, this.intersected )
+
+                            } else {
+
+                                if ( this.intersected.object.uuid !== object.uuid ) {
+
+                                    this._clearPreviousIntersected()
+                                    this._keepReferenceOf( object, this.intersected )
+
+                                }
+
+                            }
+
+                        },
+
+                        _updateSelected ( object ) {
+
+                            if ( object && (object.type === 'Group' || object.type === 'Scene') ) {
+                                return
+                            }
+
+                            if ( !this.selected.object ) {
+
+                                if ( this.intersected.object ) {
+                                    this._clearPreviousIntersected()
+                                }
+
+                                this._keepReferenceOf( object, this.selected )
+
+                            } else {
+
+                                if ( this.selected.object.uuid !== this.intersected.object.uuid ) {
+
+                                    this.onDeselect()
+
+                                    if ( this.intersected.object ) {
+                                        this._clearPreviousIntersected()
+                                    }
+
+                                    this._keepReferenceOf( object, this.selected )
+
+                                }
+
+                            }
+
+                        },
+
+                        _keepReferenceOf ( objectToRef, refObject ) {
+
+                            refObject.object           = objectToRef
+                            refObject.originalMaterial = objectToRef.material
+                            refObject.object.material  = this._cloneMaterials( objectToRef.material )
+
+                        },
+
+                        _cloneMaterials ( materials ) {
+
+                            if ( !materials ) {
+                                return
+                            }
+
+                            if ( Array.isArray( materials ) ) {
+
+                                const cloneMaterials = []
+                                for ( let i = 0, n = materials.length ; i < n ; i++ ) {
+
+                                    const material = materials[ i ]
+                                    // Fix wrong cloning with undefined
+                                    if ( material.userData === undefined ) {
+                                        material.userData = {}
+                                    }
+
+                                    let cloneMaterial = material.clone()
+                                    cloneMaterial.color.set( 0x00c8ff ) //0xfa9600
+                                    cloneMaterials.push( cloneMaterial )
+
+                                }
+                                return cloneMaterials
+
+                            } else {
+
+                                // Fix wrong cloning with undefined
+                                if ( materials.userData === undefined ) {
+                                    materials.userData = {}
+                                }
+
+                                const cloneMaterial = materials.clone()
+                                cloneMaterial.color.set( 0x00c8ff ) //0xfa9600
+                                return cloneMaterial
+
+                            }
+
+                        },
+
+                        _clearPreviousIntersected () {
+
+                            if ( this.intersected.object ) {
+
+                                if ( this.intersected.object.material ) {
+
+                                    this._releaseMaterials( this.intersected.object.material )
+                                    this.intersected.object.material = this.intersected.originalMaterial
+
+                                }
+
+                                this._releaseReferenceFrom( this.intersected )
+
+                            }
+
+                        },
+
+                        _releaseReferenceFrom ( refObject ) {
+
+                            refObject.originalMaterial = undefined
+                            refObject.object           = undefined
+
+                        },
+
+                        _resetOriginalMaterialOf ( refObject ) {
+
+                            this._releaseMaterials( refObject.object.material )
+                            refObject.object.material = refObject.originalMaterial
+
+                        },
+
+                        _releaseMaterials ( materials ) {
+
+                            if ( !materials ) {
+                                return
+                            }
+
+                            if ( Array.isArray( materials ) ) {
+                                for ( let i = 0, n = materials.length ; i < n ; i++ ) {
+                                    materials[ i ].dispose()
+                                }
+                            } else {
+                                materials.dispose()
+                            }
+
+                        }
+
+                    },
+                    created () {
+
+
+                        // Should not be observed...
+                        this.viewport.scene    = new Itee.Scene()
+                        this.viewport.renderer = new Itee.WebGLRenderer( {
+                            antialias:              true,
+                            logarithmicDepthBuffer: true
+                        } )
+                        //                        this.viewport.renderer.setPixelRatio( window.devicePixelRatio )
+                        //                        this._renderer.setClearColor( this.backgroundColor || 0x000000 )
+                        //                        this._renderer.autoClear         = true
+                        //                        this._renderer.shadowMap.enabled = true
+                        //                        //                    this._renderer.shadowMap.type = BasicShadowMap
+                        //                        this._renderer.shadowMap.type    = PCFShadowMap
+                        //                        //                    this._renderer.shadowMap.type = PCFSoftShadowMap
+
+                    },
+                    mounted () {
+
+                        this._createEnvironement()
+                        this._fetchData()
+
+                    }
+                }
+            )
+
+		</script>
+	</body>
+</html>

@@ -41,6 +41,11 @@ const packageInfos = require( './package.json' )
 const gulp         = require( 'gulp' )
 const jsdoc        = require( 'gulp-jsdoc3' )
 const eslint       = require( 'gulp-eslint' )
+const gulpif       = require( 'gulp-if' )
+const less         = require( 'gulp-less' )
+const sass         = require( 'gulp-sass' )
+const cleanCss     = require( 'gulp-clean-css' )
+const concat       = require( 'gulp-concat' )
 const del          = require( 'del' )
 const parseArgs    = require( 'minimist' )
 const rollup       = require( 'rollup' )
@@ -118,7 +123,7 @@ gulp.task( 'clean', () => {
     const filesToClean = [
         './builds',
         './tests/builds',
-        './documentation'
+        './docs'
     ]
 
     return del( filesToClean )
@@ -278,6 +283,77 @@ gulp.task( 'build-test', ( done ) => {
     }
 
 } )
+
+/**
+ * @method npm run build-style-dev
+ * @global
+ * @description Build less files from assets, and concat them into one file
+ */
+gulp.task( 'build-style-dev', () => {
+
+    const styleFiles = [
+        //    './node_modules/font-awesome/less/font-awesome.less',
+        //    './node_modules/bootstrap/scss/bootstrap.scss',
+        //    './node_modules/bootstrap-slider/dist/css/bootstrap-slider.css',
+        './styles/itee-client.less'
+    ]
+
+    return gulp.src( styleFiles )
+               .pipe( gulpif( /[.]less$/, less() ) )
+               .pipe( gulpif( /[.]scss$/, sass() ) )
+               .pipe( concat( 'itee-client.style.css' ) )
+               .pipe( gulp.dest( './builds/' ) )
+
+} )
+
+/**
+ * @method npm run build-style-prod
+ * @global
+ * @description Build less files from assets, and concat them into one minimified file
+ */
+gulp.task( 'build-style-prod', () => {
+
+    const styleFiles = [
+        //    './node_modules/font-awesome/less/font-awesome.less',
+        //    './node_modules/bootstrap/scss/bootstrap.scss',
+        //    './node_modules/bootstrap-slider/dist/css/bootstrap-slider.css',
+        './styles/itee-client.less'
+    ]
+
+    return gulp.src( styleFiles )
+               .pipe( gulpif( /[.]less$/, less() ) )
+               .pipe( gulpif( /[.]scss/, sass() ) )
+               .pipe( concat( 'itee-client.style.min.css' ) )
+               .pipe( cleanCss( { compatibility: 'ie8' } ) )
+               .pipe( gulp.dest( './builds/' ) )
+
+} )
+
+/**
+ * @method npm run build-style
+ * @global
+ * @description Build styles files from assets for dev and prod envs.
+ */
+gulp.task( 'build-style', gulp.parallel( 'build-style-dev', 'build-style-prod' ) )
+
+/**
+ * @method npm run watch-style
+ * @global
+ * @description Add watcher to assets less/css files and run build-style on file change
+ */
+gulp.task( 'watch-style', gulp.series( 'build-style', ( done ) => {
+
+    const styleFiles = [
+        //    './node_modules/font-awesome/less/font-awesome.less',
+        //    './node_modules/bootstrap/scss/bootstrap.scss',
+        //    './node_modules/bootstrap-slider/dist/css/bootstrap-slider.css',
+        './styles/itee-client.less'
+    ]
+
+    gulp.watch( styleFiles, [ 'build-style' ] )
+    done()
+
+} ) )
 
 /**
  * @method npm run build

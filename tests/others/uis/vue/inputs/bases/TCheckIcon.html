@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TCheckIcon</title>
+		<!--<link rel='stylesheet' type='text/css' href="../../../../../builds/itee-client.style.js"></link>-->
+		<link rel='stylesheet' type='text/css' href="../../../../../styles/bootstrap.css"></link>
+		<style>
+			body {
+				display: flex;
+				width: 100vw;
+				height: 100vh;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+			.item {
+				display: flex;
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="itee-application-root"></div>
+
+		<script src="../../../../../builds/itee-client.iife.js"></script>
+		<script>
+
+            Itee.startApp(
+                {
+                    el:       '#itee-application-root',
+                    data:     {
+                        _timeoutId: undefined,
+                        input: {
+                            value: false,
+	                        iconOn: 'eye',
+	                        iconOff: 'eye-slash'
+                        }
+                    },
+                    template: `
+	                    <TContainer orientation="vertical" vAlign="center" hAlign="stretch" expand=true>
+	                        <TContainer height="500px" orientation="horizontal" vAlign="stretch" hAlign="stretch">
+
+								<TContainer class="container" orientation="vertical" vAlign="center" hAlign="center">
+									<TCheckIcon :value="input.value" :iconOn="input.iconOn" :iconOff="input.iconOff" :onClick=onClickHandler />
+								</TContainer>
+
+					        </TContainer>
+				        </TContainer>
+				    `,
+	                methods: {
+
+                        onClickHandler( value ) {
+
+                            this.input.value = value
+
+                        }
+
+	                }
+                }
+            )
+
+		</script>
+	</body>
+</html>
