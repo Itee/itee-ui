@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Vue</title>
+		<link rel="stylesheet" type="text/css" href="../../builds/itee-client.style.css">
+		<style>
+
+			.red {
+				background-color: indianred;
+			}
+
+			.green {
+				background-color: limegreen;
+			}
+
+			.blue {
+				background-color: dodgerblue;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+
+		<script src="../../builds/itee-client.iife.js"></script>
+		<script src="./VueConfig.js"></script>
+		<script>
+//            var app = new Itee.createSpaceCraft( config )
+            
+            const environment  = Itee.analyseEnvironment()
+            const rawMaterial  = Itee.getRawMaterial( environment )
+//            const fuselage     = Itee.createFuselage()
+            const flyingSaucer = Itee.createFlyingSaucer( rawMaterial )
+            //
+            flyingSaucer.launch()
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TInputColor</title>
+		<!--<link rel='stylesheet' type='text/css' href="../../../../../builds/itee-client.style.js"></link>-->
+		<link rel='stylesheet' type='text/css' href="../../../../../styles/bootstrap.css"></link>
+		<style>
+			body {
+				display: flex;
+				width: 100vw;
+				height: 100vh;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+			.input-group-text input[type=color] {
+				width: 30px;
+				height: 30px;
+				padding: 0;
+				margin: -15px 0;
+				background-color: #e9ecef;
+				border: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="itee-application-root"></div>
+
+		<script src="../../../../../builds/itee-client.iife.js"></script>
+		<script>
+
+            Itee.startApp(
+                {
+                    el:       '#itee-application-root',
+                    data:     {
+                        _timeoutId: undefined,
+                        input: {
+                            label: 'TInputColor',
+                            value: '#00ff00'
+                        }
+                    },
+                    template: `
+	                    <TContainer orientation="vertical" vAlign="center" hAlign="stretch" expand=true>
+	                        <TContainer height="500px" orientation="horizontal" vAlign="stretch" hAlign="stretch">
+
+								<TContainer class="container" orientation="vertical" vAlign="center" hAlign="center">
+									<TInputColor :label="input.label" :value="input.value" :onChange=onChangeHandler />
+								</TContainer>
+
+					        </TContainer>
+				        </TContainer>
+				    `,
+	                methods: {
+
+                        onChangeHandler( value ) {
+
+                            this.input.value = value
+
+                        }
+
+	                }
+                }
+            )
+
+		</script>
+	</body>
+</html>

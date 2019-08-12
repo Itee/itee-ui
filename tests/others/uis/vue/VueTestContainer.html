@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TItemList</title>
+		<!--<link rel="stylesheet" type="text/css" href="../../node_modules/font-awesome/css/font-awesome.css">-->
+		<!--<link rel="stylesheet" type="text/css" href="../resources/styles/itee-client.style.css">-->
+		<style>
+			html, body {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				display: flex;
+				background-color: #4b4b4b;
+			}
+
+			.affix {
+				position: fixed;
+				bottom: 10px;
+				right: 10px;
+				background-color: #2b516f;
+			}
+
+			.affix div {
+				display: inline-block;
+			}
+
+			.affix div button {
+				display: block;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+			.itemList {
+				border: 2px inset white;
+			}
+
+			.item {
+				display: flex;
+			}
+
+			.itemRed {
+				min-width: 100px;
+				min-height: 130px;
+				border: 1px solid black;
+				text-align: right;
+				background-color: indianred;
+			}
+
+			.itemGreen {
+				min-width: 100px;
+				min-height: 100px;
+				border: 1px solid black;
+				background-color: limegreen;
+			}
+
+			.itemBlue {
+				border: 1px solid black;
+				font-size: 2em;
+				background-color: dodgerblue;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script src="../../builds/itee-client.iife.js"></script>
+		<script src="./VueConfigContainer.js"></script>
+		<script>
+
+            var app = new Itee.startApp( config )
+
+		</script>
+	</body>
+</html>

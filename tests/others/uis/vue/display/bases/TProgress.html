@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>TProgress</title>
+		<link rel='stylesheet' type='text/css' href="../../../../../styles/bootstrap.css"></link>
+		<style>
+			body {
+				display: flex;
+				width: 100vw;
+				height: 100vh;
+			}
+
+			.stretchChildren > * {
+				flex: 1;
+			}
+
+			.item {
+				display: flex;
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="itee-application-root"></div>
+
+		<script src="../../../../../builds/itee-client.iife.js"></script>
+		<script>
+
+            Itee.startApp(
+                {
+                    el:       '#itee-application-root',
+                    data:     {
+                        _timeoutId: undefined,
+                        progressDone: 0,
+	                    progressTodo: 100
+                    },
+                    template: `
+	                    <TContainer orientation="vertical" vAlign="center" hAlign="stretch" expand=true>
+	                        <TContainer height="500px" orientation="horizontal" vAlign="stretch" hAlign="stretch">
+
+								<TContainer orientation="vertical" vAlign="stretch" hAlign="center">
+									<TProgress orientation="vertical" v-bind:todo=progressTodo v-bind:done=progressDone></TProgress>
+								</TContainer>
+								<TContainer orientation="horizontal" vAlign="center" hAlign="stretch">
+									<TProgress v-bind:todo=progressTodo v-bind:done=progressDone></TProgress>
+								</TContainer>
+								<TContainer orientation="vertical" vAlign="stretch" hAlign="center">
+									<TProgress orientation="vertical" v-bind:todo=progressTodo v-bind:done=progressDone :reverse=true></TProgress>
+								</TContainer>
+								<TContainer orientation="horizontal" vAlign="center" hAlign="stretch">
+									<TProgress v-bind:todo=progressTodo v-bind:done=progressDone :reverse=true></TProgress>
+								</TContainer>
+
+					        </TContainer>
+				        </TContainer>
+				    `,
+	                mounted() {
+
+                        const self = this
+                        self._timeoutId = setInterval(()=>{
+
+                            self.progressDone += 5
+
+	                        if( self.progressDone >= self.progressTodo ) {
+                                self.progressDone = self.progressTodo
+                                clearInterval(self._timeoutId)
+	                        }
+
+                        }, 500)
+
+	                }
+                }
+            )
+
+		</script>
+	</body>
+</html>
