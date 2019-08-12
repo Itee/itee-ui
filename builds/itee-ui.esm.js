@@ -1,4 +1,4 @@
-console.log('Itee.UI v1.0.0 - EsModule')
+console.log('Itee.UI v1.1.0 - EsModule')
 import Vue from 'vue';
 import { isObject as isObject$1, isNull as isNull$1, isUndefined as isUndefined$1, isString as isString$1, isArrayOfString, isArrayOfObject, isNotNumber, isNotString, isDefined } from 'itee-validators';
 import { toEnum } from 'itee-utils';
