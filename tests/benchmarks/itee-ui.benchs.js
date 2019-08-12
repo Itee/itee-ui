@@ -6,7 +6,7 @@
 
 /* global suite, benchmark */
 
-const IteeUtilsSuite = suite( 'Itee#Utils', () => {
+const IteeUISuite = suite( 'Itee#UI', () => {
 
     benchmark(
         'isBenching()',
@@ -19,4 +19,4 @@ const IteeUtilsSuite = suite( 'Itee#Utils', () => {
 
 } )
 
-export { IteeUtilsSuite }
+export { IteeUISuite }
