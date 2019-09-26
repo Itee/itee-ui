@@ -71,6 +71,7 @@
     "three-full": "^17.1.0",
     "vue": "^2.6.10",
     "vue-color": "^2.7.0",
+    "vue-fontawesome": "0.0.2",
     "vue-resize-directive": "^1.2.0"
   },
   "devDependencies": {
