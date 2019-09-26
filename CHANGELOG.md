@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Itee/itee-ui/compare/v1.1.0...v1.1.1) (2019-09-26)
+
+
+### Bug Fixes
+
+* **package:** update package to their latest version, and upgrade version for previous wrong commits ([63d6876](https://github.com/Itee/itee-ui/commit/63d6876))
+
 # [1.1.0](https://github.com/Itee/itee-ui/compare/v1.0.0...v1.1.0) (2019-08-12)
 
 
