@@ -1,0 +1,10 @@
+
+
+// Include bootstrap first
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+
+// Then bootstrap-vue specific stuff
+@import "node_modules/bootstrap-vue/src/index.scss";
+
+// And finally custom SCSS for our components
+//@import "components/index";
