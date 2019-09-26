@@ -289,13 +289,48 @@ gulp.task( 'build-test', ( done ) => {
  * @global
  * @description Build less files from assets, and concat them into one file
  */
+gulp.task( 'build-style', () => {
+
+    const styleFiles = [
+        //        './node_modules/bootstrap/scss/bootstrap.scss',
+        //        './node_modules/bootstrap-vue/src/index.scss',
+        // Or
+        //        './node_modules/bootstrap/dist/css/bootstrap.css',
+        //        './node_modules/bootstrap-vue/dist/bootstrap-vue.css',
+        //        './sources/styles/itee-ui.less'
+        // Or
+        './sources/styles/itee-ui.scss',
+        './sources/styles/itee-ui.less'
+    ]
+
+    const outputFolder       = './builds/'
+    const fileName           = 'itee-ui.style.css'
+    const fileNameMinimified = 'itee-ui.style.min.css'
+
+    return gulp.src( styleFiles )
+               .pipe( gulpif( /[.]scss$/, sass() ) )
+               .pipe( gulpif( /[.]less$/, less() ) )
+               .pipe( concat( fileName ) )
+               .pipe( gulp.dest( outputFolder ) )
+               .pipe( concat( fileNameMinimified ) )
+               .pipe( cleanCss() )
+               .pipe( gulp.dest( outputFolder ) )
+
+} )
+
+/*
 gulp.task( 'build-style-dev', () => {
 
     const styleFiles = [
-        //    './node_modules/font-awesome/less/font-awesome.less',
-        //    './node_modules/bootstrap/scss/bootstrap.scss',
-        //    './node_modules/bootstrap-slider/dist/css/bootstrap-slider.css',
-        './styles/itee-client.less'
+        //        './node_modules/bootstrap/scss/bootstrap.scss',
+        //        './node_modules/bootstrap-vue/src/index.scss',
+        // Or
+        //        './node_modules/bootstrap/dist/css/bootstrap.css',
+        //        './node_modules/bootstrap-vue/dist/bootstrap-vue.css',
+        //        './sources/styles/itee-client.less'
+        // Or
+        './sources/styles/itee-ui.scss',
+        './sources/styles/itee-client.less'
     ]
 
     return gulp.src( styleFiles )
@@ -306,35 +341,41 @@ gulp.task( 'build-style-dev', () => {
 
 } )
 
-/**
+/!**
  * @method npm run build-style-prod
  * @global
  * @description Build less files from assets, and concat them into one minimified file
- */
+ *!/
 gulp.task( 'build-style-prod', () => {
 
     const styleFiles = [
-        //    './node_modules/font-awesome/less/font-awesome.less',
-        //    './node_modules/bootstrap/scss/bootstrap.scss',
-        //    './node_modules/bootstrap-slider/dist/css/bootstrap-slider.css',
-        './styles/itee-client.less'
+        //        './node_modules/bootstrap/scss/bootstrap.scss',
+        //        './node_modules/bootstrap-vue/src/index.scss',
+        // Or
+        //        './node_modules/bootstrap/dist/css/bootstrap.css',
+        //        './node_modules/bootstrap-vue/dist/bootstrap-vue.css',
+        //        './sources/styles/itee-client.less'
+        // Or
+        './sources/styles/itee-ui.scss',
+        './sources/styles/itee-client.less'
     ]
 
     return gulp.src( styleFiles )
-               .pipe( gulpif( /[.]less$/, less() ) )
                .pipe( gulpif( /[.]scss/, sass() ) )
+               .pipe( gulpif( /[.]less$/, less() ) )
                .pipe( concat( 'itee-client.style.min.css' ) )
                .pipe( cleanCss( { compatibility: 'ie8' } ) )
                .pipe( gulp.dest( './builds/' ) )
 
 } )
+*/
 
 /**
  * @method npm run build-style
  * @global
  * @description Build styles files from assets for dev and prod envs.
  */
-gulp.task( 'build-style', gulp.parallel( 'build-style-dev', 'build-style-prod' ) )
+//gulp.task( 'build-style', gulp.parallel( 'build-style-dev', 'build-style-prod' ) )
 
 /**
  * @method npm run watch-style
@@ -355,12 +396,7 @@ gulp.task( 'watch-style', gulp.series( 'build-style', ( done ) => {
 
 } ) )
 
-/**
- * @method npm run build
- * @global
- * @description Will build itee client module using optional arguments. See help to further informations.
- */
-gulp.task( 'build', ( done ) => {
+gulp.task( 'build-script', ( done ) => {
 
     const options = parseArgs( process.argv, {
         string:  [ 'n', 'i', 'f', 'e' ],
@@ -374,7 +410,7 @@ gulp.task( 'build', ( done ) => {
             s: true,
             t: true
         },
-        alias: {
+        alias:   {
             n: 'name',
             i: 'input',
             o: 'output',
@@ -415,6 +451,14 @@ gulp.task( 'build', ( done ) => {
     }
 
 } )
+
+/**
+ * @method npm run build
+ * @global
+ * @description Will build itee client module using optional arguments. See help to further informations.
+ */
+//gulp.task( 'build', gulp.parallel( 'build-style' ) )
+gulp.task( 'build', gulp.parallel( 'build-style', 'build-script' ) )
 
 /**
  * @method npm run release
