@@ -56,8 +56,7 @@ function _computeIntro () {
         'if( iteeValidators === undefined ) { console.error(\'Itee.UI need Itee.Validators to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( iteeUtils === undefined ) { console.error(\'Itee.UI need Itee.Utils to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( threeFull === undefined ) { console.error(\'Itee.UI need Three to be defined first. Please check your scripts loading order.\') }' + '\n' +
-        'if( Vue === undefined ) { console.error(\'Itee.UI need Vue to be defined first. Please check your scripts loading order.\') }' + '\n' +
-        'if( resize === undefined ) { console.error(\'Itee.UI need VueResizeDirective to be defined first. Please check your scripts loading order.\') }' + '\n'
+        'if( Vue === undefined ) { console.error(\'Itee.UI need Vue to be defined first. Please check your scripts loading order.\') }' + '\n'
 
 }
 
@@ -97,9 +96,6 @@ function CreateRollupConfigs ( options ) {
                     'itee-utils',
                     'itee-validators',
                     'vue',
-                    'vue-color',
-                    'vue-resize-directive',
-                    'stats.js',
                     'three-full'
                 ],
                 plugins: [
@@ -139,8 +135,7 @@ function CreateRollupConfigs ( options ) {
                         'itee-validators':      'Itee.Validators',
                         'itee-utils':           'Itee.Utils',
                         'three-full':           'Three',
-                        'vue':                  'Vue',
-                        'vue-resize-directive': 'VueResizeDirective'
+                        'vue':                  'Vue'
                     },
 
                     // advanced options
