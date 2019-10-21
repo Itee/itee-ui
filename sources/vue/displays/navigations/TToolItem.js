@@ -14,17 +14,17 @@ import Vue from 'vue'
 
 export default Vue.component( 'TToolItem', {
     template: `
-        <div v-if="onClick" :class=computedClass :title=tooltip @click=onClick(onClickData)>
-            <TIcon v-if='icon' :iconProps="icon" class="tToolIcon" />
+        <div v-if="onClick" :class=computedClass :title=tooltip v-on:click=onClick(onClickData)>
+            <TIcon v-if='icon' :icon="icon" class="tToolIcon" />
               {{label}}
             <slot></slot>
             <template v-if='isCheckableItem'>
-              <TIcon v-if=computedState iconProps="check-square"  v-bind:iconOn="{click: _onClickCheckBox}" class="tToolIcon" />
-              <TIcon v-else iconProps="square" v-bind:iconOn="{click: _onClickCheckBox}" class="tToolIcon" />
+              <TIcon v-if=computedState icon="check-square" v-on:click="_onClickCheckBox" class="tToolIcon" />
+              <TIcon v-else icon="square" v-on:click="_onClickCheckBox" class="tToolIcon" />
             </template>
         </div>
         <div v-else :class=computedClass :title=tooltip >
-            <TIcon v-if='icon' :iconProps="icon" class="tToolIcon" />
+            <TIcon v-if='icon' :icon="icon" class="tToolIcon" />
             {{label}}
             <slot></slot>
         </div>

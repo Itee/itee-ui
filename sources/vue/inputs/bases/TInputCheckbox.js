@@ -13,11 +13,11 @@ import Vue from 'vue'
 export default Vue.component( 'TInputCheckbox', {
     template: `
         <div class="btn-group-toggle btn-block" data-toggle="buttons">
-            <label v-if="value === true" class="btn btn-primary btn-block active" @click=_onClick>
-                <TIcon :iconProps=iconOn v-bind:iconOn="{click: _onClick}" /> {{label}}
+            <label v-if="value === true" class="btn btn-primary btn-block active" v-on:click=_onClick>
+                <TIcon :icon=iconOn v-on:click=_onClick /> {{label}}
             </label>
             <label v-else class="btn btn-secondary btn-block" @click=_onClick>
-                <TIcon :iconProps=iconOff v-bind:iconOn="{click: _onClick}" /> {{label}}
+                <TIcon :icon=iconOff v-on:click=_onClick /> {{label}}
             </label>
         </div>
     `,
@@ -26,9 +26,9 @@ export default Vue.component( 'TInputCheckbox', {
 
         _onClick ( /*event*/ ) {
 
-            const newValue = !this.value
+            const newValue = !this.value;
 
-            this.onChange( newValue )
+            this.onChange( newValue );
 
         }
 

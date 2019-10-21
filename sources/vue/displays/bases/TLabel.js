@@ -13,11 +13,11 @@ import Vue from 'vue'
 export default Vue.component( 'TLabel', {
     template: `
         <label v-if=onClickHandler class="tLabel" :title=tooltip @click=onClickHandler>
-            <TIcon v-if='icon' :iconProps="icon" />
+            <TIcon v-if='icon' :icon="icon" />
             {{label}}
         </label>
         <label v-else class="tLabel" :title=tooltip>
-            <TIcon v-if='icon' :iconProps="icon" />
+            <TIcon v-if='icon' :icon="icon" />
             {{label}}
         </label>
     `,

@@ -23,12 +23,12 @@ export default Vue.component( 'TButton', {
     template: `
         <button :id=computeId :class=computeClass type="button" :disabled="isDisabled" :aria-pressed="isActive" :aria-disabled="isDisabled" v-on:click="$emit('click')">
             <span v-for="decorator in preDecorators">
-                <TIcon v-if="decorator.type === 'icon'" :iconProps='decorator.icon' />
+                <TIcon v-if="decorator.type === 'icon'" :icon='decorator.icon' />
                 <label v-else>Error: Unknown/unallowed decorator of type "{{decorator.type}}" !!!</label>
             </span>
             <slot></slot>{{label}}
             <span v-for="decorator in postDecorators">
-                <TIcon v-if="decorator.type === 'icon'" :iconProps='decorator.icon' />
+                <TIcon v-if="decorator.type === 'icon'" :icon='decorator.icon' />
                 <label v-else>Error: Unknown/unallowed decorator of type "{{decorator.type}}" !!!</label>
             </span>
         </button>
