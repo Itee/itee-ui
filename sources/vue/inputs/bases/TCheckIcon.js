@@ -12,18 +12,21 @@ import Vue from 'vue'
 
 export default Vue.component( 'TCheckIcon', {
     template: `
-        <TIcon v-if="value === true" class="tCheckicon active" :iconProps=iconOn v-bind:iconOn="{click: _onClick}" />
-        <TIcon v-else class="tCheckicon active" :iconProps=iconOff v-bind:iconOn="{click: _onClick}" />
+        <div>
+            <TIcon v-if="checked === true" class="tCheckicon active" :icon=iconOn v-on:click=_onClick />
+            <TIcon v-else class="tCheckicon active" :icon=iconOff v-on:click=_onClick />
+            <input ref="checkboxInput" type="checkbox" v-bind:checked="checked" v-on:change="$emit('change', $event.target.checked)" class="d-none" />
+        </div>
     `,
-    props:   [ 'id', 'value', 'iconOn', 'iconOff', 'onClick' ],
-    methods: {
+    props:    [ 'id', 'iconOn', 'iconOff', 'checked' ],
+    model:    {
+        prop:  'checked',
+        event: 'change'
+    },
+    methods:  {
 
         _onClick ( /*event*/ ) {
-
-            const newValue = !this.value
-
-            this.onClick( newValue )
-
+            this.$refs.checkboxInput.click()
         }
 
     }

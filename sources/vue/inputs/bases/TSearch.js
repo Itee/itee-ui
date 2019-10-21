@@ -40,10 +40,10 @@ export default Vue.component( 'TSearch', {
 
                     <div class="input-group-append tsearch-toolbar">
                       <span class="tsearch-close" @click=onClose()> 
-                        <TIcon iconProps="times" />
+                        <TIcon icon="times" />
                       </span>
                       <span :class="dragClass"> 
-                        <TIcon iconProps="arrows-alt" />
+                        <TIcon icon="arrows-alt" />
                       </span>
                     </div>
                     

@@ -20,10 +20,10 @@ export default Vue.component( 'TTable', {
                 <h4 v-else class="float-left"> {{ label }} </h4>
                 <div class="ttable-toolbar">
                   <span class="ttable-close" @click=onClose()> 
-                    <TIcon iconProps="times" iconClass="ttable-close" />
+                    <TIcon icon="times" iconClass="ttable-close" />
                   </span>
                   <span :class="dragClass">
-                    <TIcon iconProps="arrows-alt" />
+                    <TIcon icon="arrows-alt" />
                   </span>
                 </div>
               </th>

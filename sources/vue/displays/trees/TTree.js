@@ -18,31 +18,64 @@ export default Vue.component( 'TTree', {
             <div class="tTreeHeader">
                 <slot name="header"></slot>
             </div>
-            <ul v-if="haveItems()" class="tTreeItemChildren">
+            <ul v-if="haveItems()" class="tTreeItemChildren p-2">
                 <TTreeItem
                     v-for="item in computedItems"
                     v-bind:key="item.id"
+                    v-bind:id="item.id"
                     v-bind:name="item.name"
-                    v-bind:onClick="item.onClick"
+                    v-bind:isSelected="item.isSelected"
+                    v-bind:isHovered="item.isHovered"
                     v-bind:modifiers="item.modifiers"
                     v-bind:children="item.children"
                     v-bind:filters="filters"
                     v-bind:sort="sort"
-                    v-bind:deepSelect="deepSelect"
+                    v-bind:selectAllChildren="selectAllChildren"
                     v-bind:multiSelect="multiSelect"
-                    v-bind:needUpdate="needUpdate"
                     v-bind:maxDeepLevel="maxDeepLevel"
                     v-bind:_currentDeepLevel="0"
+                    v-on="$listeners"
                 />
             </ul>
         </TContainerVertical>
     `,
-    props:    [ 'items', 'filters', 'sort', 'deepSelect', 'multiSelect', 'needUpdate', 'maxDeepLevel' ],
+    props: {
+        items:           {
+            type: Array
+        },
+        filters:           {
+            type: Array
+        },
+        sort:              {
+            type:    String,
+            default: 'asc'
+        },
+        multiSelect:       {
+            type:    Boolean,
+            default: false
+        },
+        selectAllChildren: {
+            type:    Boolean,
+            default: false
+        },
+        minDeepLevel:      {
+            type:    Number,
+            default: 0
+        },
+        maxDeepLevel:      {
+            type:    Number,
+            default: 10
+        }
+    },
     computed: {
 
         computedItems () {
 
             let items = this.items || []
+
+            if ( this.minDeepLevel > 0 ) {
+                items = this.confineItems( items, 0 )
+            }
 
             if ( this.filters ) {
                 items = this.filterItems( items )
@@ -57,11 +90,23 @@ export default Vue.component( 'TTree', {
         }
 
     },
-    methods: {
+    methods:  {
 
         haveItems () {
 
             return this.items && this.items.length > 0
+
+        },
+
+        confineItems ( objects, deepLevel ) {
+
+            if ( deepLevel === this.minDeepLevel ) { return objects }
+
+            const children = []
+            for ( let index = 0, numberOfObjects = objects.length ; index < numberOfObjects ; index++ ) {
+                children.push( ...this.confineItems( objects[ index ].children, deepLevel + 1 ) )
+            }
+            return children
 
         },
 
