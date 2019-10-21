@@ -9,32 +9,29 @@
  */
 
 import { isDefined }                from 'itee-validators'
-//import { isDefined }                from 'itee-validators/sources/cores/voids/isDefined'
 import Vue                          from 'vue'
 import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
 
 export default Vue.component( 'TTreeItem', {
     template: `
-        <li v-if="forceUpdate" :class=computeTreeItemClass>
+        <li :class=computeTreeItemClass>
             <TContainerHorizontal :class=computeTreeItemContentClass hAlign="start" vAlign="center">
-                <TIcon v-if="haveChildren() && acceptableDeepLevel" :iconProps=computeToggleChildrenIconClass :iconOn="{click: toggleChildren}" />
+                <TIcon v-if="haveChildren() && acceptableDeepLevel" :icon=computeToggleChildrenIconClass v-on:click="toggleChildren" />
                 <span v-for="modifier in filteredAntelabelModifier" class="tTreeItemModifiers">
-                    <TIcon v-if="modifier.type === 'icon'" :iconProps='modifier.icon' v-bind:iconOn="{click: modifier.onClick}" />
-                    <TCheckIcon v-else-if="modifier.type === 'checkicon'" :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" :value="modifier.value" :onClick=modifier.onClick />
-                    <TButton v-else-if="modifier.type === 'button'" :label="modifier.label" :icon="modifier.icon" :onClick=modifier.onClick :messageData="modifier.value" />
-                    <input v-else-if="modifier.type === 'range'" class="tInputRange form-control" type="range" value="100" max="100" @input="modifier.onInput" />
-                    <input v-else-if="modifier.type === 'number'" type="number" @change="modifier.onChange" />
-                    <input v-else-if="modifier.type === 'color'" type="color" @change="modifier.onChange" />
+                    <TIcon v-if="modifier.type === 'icon'"  :icon='modifier.icon' v-on:click="_onModifierChange( modifier )" />
+                    <TCheckIcon v-else-if="modifier.type === 'checkicon'"  :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'range'" type="range" class="tInputRange form-control" v-model="modifier.value" :min="modifier.min" :max="modifier.max" :step="modifier.step" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'number'"  type="number" v-model="modifier.value" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'color'"  type="color" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
                     <label v-else>Error: Unknown modifier of type "{{modifier.type}}" !!!</label>
                 </span>
-                <label @click="function () { updateSelectionState( onClick ) }">{{name}}</label>
+                <label v-on:click.stop="_onClick" v-on:mouseover.stop="_onMouseOver" v-on:mouseout.stop="_onMouseOut">{{name}}</label>
                 <span v-for="modifier in filteredPostlabelModifier" class="tTreeItemModifiers">
-                    <TIcon v-if="modifier.type === 'icon'" :iconProps='modifier.icon' v-bind:iconOn="{click: modifier.onClick}" />
-                    <TCheckIcon v-else-if="modifier.type === 'checkicon'" :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" :value="modifier.value" :onClick=modifier.onClick />
-                    <TButton v-else-if="modifier.type === 'button'" :label="modifier.label" :icon="modifier.icon" :onClick=modifier.onClick :messageData="modifier.value" />
-                    <input v-else-if="modifier.type === 'range'" class="tInputRange form-control" type="range" value="100" max="100" @input="modifier.onInput" />
-                    <input v-else-if="modifier.type === 'number'" type="number" @change="modifier.onChange" />
-                    <input v-else-if="modifier.type === 'color'" type="color" @change="modifier.onChange" />
+                    <TIcon v-if="modifier.type === 'icon'"  :icon='modifier.icon' v-on:click="_onModifierChange( modifier )" />
+                    <TCheckIcon v-else-if="modifier.type === 'checkicon'"  :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'range'" type="range" class="tInputRange form-control" v-model="modifier.value" :min="modifier.min" :max="modifier.max" :step="modifier.step" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'number'"  type="number" v-model="modifier.value" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'color'"  type="color" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
                     <label v-else>Error: Unknown modifier of type "{{modifier.type}}" !!!</label>
                 </span>
             </TContainerHorizontal>
@@ -42,41 +39,92 @@ export default Vue.component( 'TTreeItem', {
                 <TTreeItem
                     v-for="child in computedChildren"
                     v-bind:key="child.id"
+                    v-bind:id="child.id"
                     v-bind:name="child.name"
-                    v-bind:onClick="child.onClick"
+                    v-bind:isSelected="child.isSelected"
+                    v-bind:isHovered="child.isHovered"
                     v-bind:modifiers="child.modifiers"
                     v-bind:children="child.children"
                     v-bind:filters="filters"
                     v-bind:sort="sort"
-                    v-bind:deepSelect="deepSelect"
                     v-bind:multiSelect="multiSelect"
-                    v-bind:needUpdate="needUpdate"
+                    v-bind:selectAllChildren="selectAllChildren"
                     v-bind:maxDeepLevel="maxDeepLevel"
                     v-bind:_currentDeepLevel="_currentDeepLevel + 1"
+                    v-on="$listeners"
                 />
             </ul>
         </li>
     `,
-    data: function () {
+    data:     function () {
 
         return {
-            showChildren: false,
-            isSelected:   false
+            showChildren: false
         }
 
     },
-    props:    [ 'id', 'name', 'onClick', 'modifiers', 'children', 'filters', 'sort', 'deepSelect', 'multiSelect', 'needUpdate', 'maxDeepLevel', '_currentDeepLevel' ],
+    props:    {
+        id:                {
+            type:     Number,
+            required: true
+        },
+        name:              {
+            type:     String,
+            required: true
+        },
+        isSelected:        {
+            type:    Boolean,
+            default: false
+        },
+        isHovered:         {
+            type:    Boolean,
+            default: false
+        },
+        modifiers:         {
+            type: Array
+        },
+        children:          {
+            type: Array
+        },
+        filters:           {
+            type: Array
+        },
+        sort:              {
+            type:    String,
+            default: 'asc'
+        },
+        multiSelect:       {
+            type:    Boolean,
+            default: false
+        },
+        selectAllChildren: {
+            type:    Boolean,
+            default: false
+        },
+        maxDeepLevel:      {
+            type:    Number,
+            default: 10
+        },
+        _currentDeepLevel: {
+            type:     Number,
+            required: true
+        }
+    },
     computed: {
 
         computeTreeItemClass () {
 
-            return ( this.isSelected && this.deepSelect ) ? 'tTreeItem selected' : 'tTreeItem'
+            let classes = 'tTreeItem'
+            if ( this.isSelected && this.selectAllChildren ) { classes += ' selectedChildren' }
+            if ( this.isHovered ) { classes += ' hovered' }
+
+            return classes
 
         },
 
         computeTreeItemContentClass () {
 
-            return ( this.isSelected && !this.deepSelect ) ? 'tTreeItemContent selected' : 'tTreeItemContent'
+            return ( this.isSelected && !this.selectAllChildren ) ? 'tTreeItemContent selected' : 'tTreeItemContent'
 
         },
 
@@ -147,18 +195,10 @@ export default Vue.component( 'TTreeItem', {
 
             return ( this._currentDeepLevel < this.maxDeepLevel )
 
-        },
-
-        forceUpdate () {
-
-            if ( this.needUpdate ) { return true }
-            if ( !this.needUpdate ) { return true }
-            return true
-
         }
 
     },
-    methods: {
+    methods:  {
 
         haveChildren () {
 
@@ -208,36 +248,26 @@ export default Vue.component( 'TTreeItem', {
 
         },
 
-        updateSelectionState ( onClickCallback ) {
+        _onModifierChange( modifier ) {
 
-            // Deselect
-            if ( this.multiSelect === false ) {
+            this.$emit('item-modifier-change', this.id, modifier.action, modifier.value)
 
-                const selectedItem = document.querySelector( '.selected' )
-                if ( isDefined( selectedItem ) ) {
+        },
+        _onMouseOver () {
 
-                    const ttreeItem = ( this.deepSelect ) ? selectedItem.__vue__ : selectedItem.__vue__.$parent.$parent
+            this.$emit( 'item-mouseover', this.id )
 
-                    // In case the multiselect if false but the deepSelect is true we need to check if the selectedItem is not the child of this instance
-                    if ( this._uid !== ttreeItem._uid ) {
+        },
+        _onMouseOut () {
 
-                        ttreeItem.isSelected = false
+            this.$emit( 'item-mouseout', this.id )
 
-                    }
+        },
+        _onClick () {
 
-                }
-
-            }
-
-            // Select
-            this.isSelected = !this.isSelected
-
-            if ( onClickCallback ) {
-                onClickCallback( this.isSelected )
-            }
+            this.$emit( 'item-click', this.id )
 
         }
 
     }
-
 } )
