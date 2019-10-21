@@ -1,4 +1,4 @@
-console.log('Itee.UI v1.1.1 - Standalone')
+console.log('Itee.UI v1.1.2 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	'use strict';
@@ -36138,39 +36138,14 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	 */
 
 	// Todo: implement router facility here using target instead of clickHandler !
-
 	var TIcon = Vue.component( 'TIcon', {
-
-	    render: function ( createElement ) {
-
-	        let dataObject = {
-	            class:       this.iconClass,
-	            style:       this.iconStyle,
-	            attrs:       this.iconAttrs,
-	            props:       ( iteeValidators.isObject( this.iconProps ) ) ? this.iconProps : { icon: this.iconProps },
-	            domProps:    this.iconDomProps,
-	            on:          this.iconOn,
-	            nativeOn:    this.iconNativeOn,
-	            directives:  this.iconDirectives,
-	            scopedSlots: this.iconScopedSlots,
-	            slot:        this.iconSlot,
-	            key:         this.iconKey,
-	            ref:         this.iconRef
-	        };
-
-	        return createElement(
-	            'font-awesome-icon',
-	            dataObject
-	        )
-
-	    },
-
-	    props: [ 'iconClass', 'iconStyle', 'iconAttrs', 'iconProps', 'iconDomProps', 'iconOn', 'iconNativeOn', 'iconDirectives', 'iconScopedSlots', 'iconSlot', 'iconKey', 'iconRef' ],
-
+	    template: `
+        <font-awesome-icon :icon="icon" v-on="$listeners" />
+    `,
+	    props:      [ 'id', 'icon' ],
 	    components: {
 	        FontAwesomeIcon
 	    }
-
 	} );
 
 	/**
@@ -36186,11 +36161,11 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	var TLabel = Vue.component( 'TLabel', {
 	    template: `
         <label v-if=onClickHandler class="tLabel" :title=tooltip @click=onClickHandler>
-            <TIcon v-if='icon' :iconProps="icon" />
+            <TIcon v-if='icon' :icon="icon" />
             {{label}}
         </label>
         <label v-else class="tLabel" :title=tooltip>
-            <TIcon v-if='icon' :iconProps="icon" />
+            <TIcon v-if='icon' :icon="icon" />
             {{label}}
         </label>
     `,
@@ -40664,17 +40639,17 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 
 	var TToolItem = Vue.component( 'TToolItem', {
 	    template: `
-        <div v-if="onClick" :class=computedClass :title=tooltip @click=onClick(onClickData)>
-            <TIcon v-if='icon' :iconProps="icon" class="tToolIcon" />
+        <div v-if="onClick" :class=computedClass :title=tooltip v-on:click=onClick(onClickData)>
+            <TIcon v-if='icon' :icon="icon" class="tToolIcon" />
               {{label}}
             <slot></slot>
             <template v-if='isCheckableItem'>
-              <TIcon v-if=computedState iconProps="check-square"  v-bind:iconOn="{click: _onClickCheckBox}" class="tToolIcon" />
-              <TIcon v-else iconProps="square" v-bind:iconOn="{click: _onClickCheckBox}" class="tToolIcon" />
+              <TIcon v-if=computedState icon="check-square" v-on:click="_onClickCheckBox" class="tToolIcon" />
+              <TIcon v-else icon="square" v-on:click="_onClickCheckBox" class="tToolIcon" />
             </template>
         </div>
         <div v-else :class=computedClass :title=tooltip >
-            <TIcon v-if='icon' :iconProps="icon" class="tToolIcon" />
+            <TIcon v-if='icon' :icon="icon" class="tToolIcon" />
             {{label}}
             <slot></slot>
         </div>
@@ -41181,10 +41156,10 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
                 <h4 v-else class="float-left"> {{ label }} </h4>
                 <div class="ttable-toolbar">
                   <span class="ttable-close" @click=onClose()> 
-                    <TIcon iconProps="times" iconClass="ttable-close" />
+                    <TIcon icon="times" iconClass="ttable-close" />
                   </span>
                   <span :class="dragClass">
-                    <TIcon iconProps="arrows-alt" />
+                    <TIcon icon="arrows-alt" />
                   </span>
                 </div>
               </th>
@@ -41359,26 +41334,24 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 
 	var TTreeItem = Vue.component( 'TTreeItem', {
 	    template: `
-        <li v-if="forceUpdate" :class=computeTreeItemClass>
+        <li :class=computeTreeItemClass>
             <TContainerHorizontal :class=computeTreeItemContentClass hAlign="start" vAlign="center">
-                <TIcon v-if="haveChildren() && acceptableDeepLevel" :iconProps=computeToggleChildrenIconClass :iconOn="{click: toggleChildren}" />
+                <TIcon v-if="haveChildren() && acceptableDeepLevel" :icon=computeToggleChildrenIconClass v-on:click="toggleChildren" />
                 <span v-for="modifier in filteredAntelabelModifier" class="tTreeItemModifiers">
-                    <TIcon v-if="modifier.type === 'icon'" :iconProps='modifier.icon' v-bind:iconOn="{click: modifier.onClick}" />
-                    <TCheckIcon v-else-if="modifier.type === 'checkicon'" :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" :value="modifier.value" :onClick=modifier.onClick />
-                    <TButton v-else-if="modifier.type === 'button'" :label="modifier.label" :icon="modifier.icon" :onClick=modifier.onClick :messageData="modifier.value" />
-                    <input v-else-if="modifier.type === 'range'" class="tInputRange form-control" type="range" value="100" max="100" @input="modifier.onInput" />
-                    <input v-else-if="modifier.type === 'number'" type="number" @change="modifier.onChange" />
-                    <input v-else-if="modifier.type === 'color'" type="color" @change="modifier.onChange" />
+                    <TIcon v-if="modifier.type === 'icon'"  :icon='modifier.icon' v-on:click="_onModifierChange( modifier )" />
+                    <TCheckIcon v-else-if="modifier.type === 'checkicon'"  :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'range'" type="range" class="tInputRange form-control" v-model="modifier.value" :min="modifier.min" :max="modifier.max" :step="modifier.step" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'number'"  type="number" v-model="modifier.value" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'color'"  type="color" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
                     <label v-else>Error: Unknown modifier of type "{{modifier.type}}" !!!</label>
                 </span>
-                <label @click="function () { updateSelectionState( onClick ) }">{{name}}</label>
+                <label v-on:click.stop="_onClick" v-on:mouseover.stop="_onMouseOver" v-on:mouseout.stop="_onMouseOut">{{name}}</label>
                 <span v-for="modifier in filteredPostlabelModifier" class="tTreeItemModifiers">
-                    <TIcon v-if="modifier.type === 'icon'" :iconProps='modifier.icon' v-bind:iconOn="{click: modifier.onClick}" />
-                    <TCheckIcon v-else-if="modifier.type === 'checkicon'" :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" :value="modifier.value" :onClick=modifier.onClick />
-                    <TButton v-else-if="modifier.type === 'button'" :label="modifier.label" :icon="modifier.icon" :onClick=modifier.onClick :messageData="modifier.value" />
-                    <input v-else-if="modifier.type === 'range'" class="tInputRange form-control" type="range" value="100" max="100" @input="modifier.onInput" />
-                    <input v-else-if="modifier.type === 'number'" type="number" @change="modifier.onChange" />
-                    <input v-else-if="modifier.type === 'color'" type="color" @change="modifier.onChange" />
+                    <TIcon v-if="modifier.type === 'icon'"  :icon='modifier.icon' v-on:click="_onModifierChange( modifier )" />
+                    <TCheckIcon v-else-if="modifier.type === 'checkicon'"  :iconOn="modifier.iconOn" :iconOff="modifier.iconOff" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'range'" type="range" class="tInputRange form-control" v-model="modifier.value" :min="modifier.min" :max="modifier.max" :step="modifier.step" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'number'"  type="number" v-model="modifier.value" v-on:input="_onModifierChange( modifier )" />
+                    <input v-else-if="modifier.type === 'color'"  type="color" v-model="modifier.value" v-on:change="_onModifierChange( modifier )" />
                     <label v-else>Error: Unknown modifier of type "{{modifier.type}}" !!!</label>
                 </span>
             </TContainerHorizontal>
@@ -41386,17 +41359,19 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
                 <TTreeItem
                     v-for="child in computedChildren"
                     v-bind:key="child.id"
+                    v-bind:id="child.id"
                     v-bind:name="child.name"
-                    v-bind:onClick="child.onClick"
+                    v-bind:isSelected="child.isSelected"
+                    v-bind:isHovered="child.isHovered"
                     v-bind:modifiers="child.modifiers"
                     v-bind:children="child.children"
                     v-bind:filters="filters"
                     v-bind:sort="sort"
-                    v-bind:deepSelect="deepSelect"
                     v-bind:multiSelect="multiSelect"
-                    v-bind:needUpdate="needUpdate"
+                    v-bind:selectAllChildren="selectAllChildren"
                     v-bind:maxDeepLevel="maxDeepLevel"
                     v-bind:_currentDeepLevel="_currentDeepLevel + 1"
+                    v-on="$listeners"
                 />
             </ul>
         </li>
@@ -41404,23 +41379,72 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	    data: function () {
 
 	        return {
-	            showChildren: false,
-	            isSelected:   false
+	            showChildren: false
 	        }
 
 	    },
-	    props:    [ 'id', 'name', 'onClick', 'modifiers', 'children', 'filters', 'sort', 'deepSelect', 'multiSelect', 'needUpdate', 'maxDeepLevel', '_currentDeepLevel' ],
+	    props: {
+	        id: {
+	            type:     Number,
+	            required: true
+	        },
+	        name: {
+	            type:     String,
+	            required: true
+	        },
+	        isSelected: {
+	            type:    Boolean,
+	            default: false
+	        },
+	        isHovered: {
+	            type:    Boolean,
+	            default: false
+	        },
+	        modifiers: {
+	            type: Array
+	        },
+	        children: {
+	            type: Array
+	        },
+	        filters: {
+	            type: Array
+	        },
+	        sort: {
+	            type:    String,
+	            default: 'asc'
+	        },
+	        multiSelect: {
+	            type:    Boolean,
+	            default: false
+	        },
+	        selectAllChildren: {
+	            type:    Boolean,
+	            default: false
+	        },
+	        maxDeepLevel: {
+	            type:    Number,
+	            default: 10
+	        },
+	        _currentDeepLevel: {
+	            type:     Number,
+	            required: true
+	        }
+	    },
 	    computed: {
 
 	        computeTreeItemClass () {
 
-	            return ( this.isSelected && this.deepSelect ) ? 'tTreeItem selected' : 'tTreeItem'
+	            let classes = 'tTreeItem';
+	            if ( this.isSelected && this.selectAllChildren ) { classes += ' selectedChildren'; }
+	            if ( this.isHovered ) { classes += ' hovered'; }
+
+	            return classes
 
 	        },
 
 	        computeTreeItemContentClass () {
 
-	            return ( this.isSelected && !this.deepSelect ) ? 'tTreeItemContent selected' : 'tTreeItemContent'
+	            return ( this.isSelected && !this.selectAllChildren ) ? 'tTreeItemContent selected' : 'tTreeItemContent'
 
 	        },
 
@@ -41491,14 +41515,6 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 
 	            return ( this._currentDeepLevel < this.maxDeepLevel )
 
-	        },
-
-	        forceUpdate () {
-
-	            if ( this.needUpdate ) { return true }
-	            if ( !this.needUpdate ) { return true }
-	            return true
-
 	        }
 
 	    },
@@ -41552,38 +41568,28 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 
 	        },
 
-	        updateSelectionState ( onClickCallback ) {
+	        _onModifierChange( modifier ) {
 
-	            // Deselect
-	            if ( this.multiSelect === false ) {
+	            this.$emit('item-modifier-change', this.id, modifier.action, modifier.value);
 
-	                const selectedItem = document.querySelector( '.selected' );
-	                if ( iteeValidators.isDefined( selectedItem ) ) {
+	        },
+	        _onMouseOver () {
 
-	                    const ttreeItem = ( this.deepSelect ) ? selectedItem.__vue__ : selectedItem.__vue__.$parent.$parent;
+	            this.$emit( 'item-mouseover', this.id );
 
-	                    // In case the multiselect if false but the deepSelect is true we need to check if the selectedItem is not the child of this instance
-	                    if ( this._uid !== ttreeItem._uid ) {
+	        },
+	        _onMouseOut () {
 
-	                        ttreeItem.isSelected = false;
+	            this.$emit( 'item-mouseout', this.id );
 
-	                    }
+	        },
+	        _onClick () {
 
-	                }
-
-	            }
-
-	            // Select
-	            this.isSelected = !this.isSelected;
-
-	            if ( onClickCallback ) {
-	                onClickCallback( this.isSelected );
-	            }
+	            this.$emit( 'item-click', this.id );
 
 	        }
 
 	    }
-
 	} );
 
 	/**
@@ -41602,31 +41608,64 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
             <div class="tTreeHeader">
                 <slot name="header"></slot>
             </div>
-            <ul v-if="haveItems()" class="tTreeItemChildren">
+            <ul v-if="haveItems()" class="tTreeItemChildren p-2">
                 <TTreeItem
                     v-for="item in computedItems"
                     v-bind:key="item.id"
+                    v-bind:id="item.id"
                     v-bind:name="item.name"
-                    v-bind:onClick="item.onClick"
+                    v-bind:isSelected="item.isSelected"
+                    v-bind:isHovered="item.isHovered"
                     v-bind:modifiers="item.modifiers"
                     v-bind:children="item.children"
                     v-bind:filters="filters"
                     v-bind:sort="sort"
-                    v-bind:deepSelect="deepSelect"
+                    v-bind:selectAllChildren="selectAllChildren"
                     v-bind:multiSelect="multiSelect"
-                    v-bind:needUpdate="needUpdate"
                     v-bind:maxDeepLevel="maxDeepLevel"
                     v-bind:_currentDeepLevel="0"
+                    v-on="$listeners"
                 />
             </ul>
         </TContainerVertical>
     `,
-	    props:    [ 'items', 'filters', 'sort', 'deepSelect', 'multiSelect', 'needUpdate', 'maxDeepLevel' ],
+	    props: {
+	        items: {
+	            type: Array
+	        },
+	        filters: {
+	            type: Array
+	        },
+	        sort: {
+	            type:    String,
+	            default: 'asc'
+	        },
+	        multiSelect: {
+	            type:    Boolean,
+	            default: false
+	        },
+	        selectAllChildren: {
+	            type:    Boolean,
+	            default: false
+	        },
+	        minDeepLevel: {
+	            type:    Number,
+	            default: 0
+	        },
+	        maxDeepLevel: {
+	            type:    Number,
+	            default: 10
+	        }
+	    },
 	    computed: {
 
 	        computedItems () {
 
 	            let items = this.items || [];
+
+	            if ( this.minDeepLevel > 0 ) {
+	                items = this.confineItems( items, 0 );
+	            }
 
 	            if ( this.filters ) {
 	                items = this.filterItems( items );
@@ -41646,6 +41685,18 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	        haveItems () {
 
 	            return this.items && this.items.length > 0
+
+	        },
+
+	        confineItems ( objects, deepLevel ) {
+
+	            if ( deepLevel === this.minDeepLevel ) { return objects }
+
+	            const children = [];
+	            for ( let index = 0, numberOfObjects = objects.length ; index < numberOfObjects ; index++ ) {
+	                children.push( ...this.confineItems( objects[ index ].children, deepLevel + 1 ) );
+	            }
+	            return children
 
 	        },
 
@@ -41701,11 +41752,11 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	var TInputCheckbox = Vue.component( 'TInputCheckbox', {
 	    template: `
         <div class="btn-group-toggle btn-block" data-toggle="buttons">
-            <label v-if="value === true" class="btn btn-primary btn-block active" @click=_onClick>
-                <TIcon :iconProps=iconOn v-bind:iconOn="{click: _onClick}" /> {{label}}
+            <label v-if="value === true" class="btn btn-primary btn-block active" v-on:click=_onClick>
+                <TIcon :icon=iconOn v-on:click=_onClick /> {{label}}
             </label>
             <label v-else class="btn btn-secondary btn-block" @click=_onClick>
-                <TIcon :iconProps=iconOff v-bind:iconOn="{click: _onClick}" /> {{label}}
+                <TIcon :icon=iconOff v-on:click=_onClick /> {{label}}
             </label>
         </div>
     `,
@@ -41736,18 +41787,21 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 
 	var TCheckIcon = Vue.component( 'TCheckIcon', {
 	    template: `
-        <TIcon v-if="value === true" class="tCheckicon active" :iconProps=iconOn v-bind:iconOn="{click: _onClick}" />
-        <TIcon v-else class="tCheckicon active" :iconProps=iconOff v-bind:iconOn="{click: _onClick}" />
+        <div>
+            <TIcon v-if="checked === true" class="tCheckicon active" :icon=iconOn v-on:click=_onClick />
+            <TIcon v-else class="tCheckicon active" :icon=iconOff v-on:click=_onClick />
+            <input ref="checkboxInput" type="checkbox" v-bind:checked="checked" v-on:change="$emit('change', $event.target.checked)" class="d-none" />
+        </div>
     `,
-	    props:   [ 'id', 'value', 'iconOn', 'iconOff', 'onClick' ],
+	    props: [ 'id', 'iconOn', 'iconOff', 'checked' ],
+	    model: {
+	        prop:  'checked',
+	        event: 'change'
+	    },
 	    methods: {
 
 	        _onClick ( /*event*/ ) {
-
-	            const newValue = !this.value;
-
-	            this.onClick( newValue );
-
+	            this.$refs.checkboxInput.click();
 	        }
 
 	    }
@@ -48310,10 +48364,10 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 
                     <div class="input-group-append tsearch-toolbar">
                       <span class="tsearch-close" @click=onClose()> 
-                        <TIcon iconProps="times" />
+                        <TIcon icon="times" />
                       </span>
                       <span :class="dragClass"> 
-                        <TIcon iconProps="arrows-alt" />
+                        <TIcon icon="arrows-alt" />
                       </span>
                     </div>
                     
@@ -48524,12 +48578,12 @@ this.Itee.UI = (function (exports, Vue, iteeValidators, iteeUtils, threeFull) {
 	    template: `
         <button :id=computeId :class=computeClass type="button" :disabled="isDisabled" :aria-pressed="isActive" :aria-disabled="isDisabled" v-on:click="$emit('click')">
             <span v-for="decorator in preDecorators">
-                <TIcon v-if="decorator.type === 'icon'" :iconProps='decorator.icon' />
+                <TIcon v-if="decorator.type === 'icon'" :icon='decorator.icon' />
                 <label v-else>Error: Unknown/unallowed decorator of type "{{decorator.type}}" !!!</label>
             </span>
             <slot></slot>{{label}}
             <span v-for="decorator in postDecorators">
-                <TIcon v-if="decorator.type === 'icon'" :iconProps='decorator.icon' />
+                <TIcon v-if="decorator.type === 'icon'" :icon='decorator.icon' />
                 <label v-else>Error: Unknown/unallowed decorator of type "{{decorator.type}}" !!!</label>
             </span>
         </button>

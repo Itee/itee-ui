@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/Itee/itee-ui/compare/v1.1.1...v1.1.2) (2019-10-21)
+
+
+### Bug Fixes
+
+* **style:** fix class name selected to selectedChildren ([295d5c6](https://github.com/Itee/itee-ui/commit/295d5c611e5c3fface2b5e8d46a85f1b27840385))
+
 ## [1.1.1](https://github.com/Itee/itee-ui/compare/v1.1.0...v1.1.1) (2019-09-26)
 
 
