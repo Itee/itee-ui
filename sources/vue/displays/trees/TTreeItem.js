@@ -10,7 +10,9 @@
 
 import { isDefined }                from 'itee-validators'
 import Vue                          from 'vue'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
+import TContainerHorizontal from '../containers/TContainerHorizontal'
+import TIcon  from '../bases/TIcon'
+import TCheckIcon  from '../../inputs/bases/TCheckIcon'
 
 export default Vue.component( 'TTreeItem', {
     template: `
@@ -222,7 +224,6 @@ export default Vue.component( 'TTreeItem', {
 
             // Todo: Externalize the sort function as use defined function. And implement current sort function as utility
             if ( ![ 'asc', 'desc' ].includes( this.sort ) ) {
-                TLogger.error( 'Invalid sorter !' )
                 return
             }
 

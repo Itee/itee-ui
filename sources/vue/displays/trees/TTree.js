@@ -9,7 +9,6 @@
  */
 
 import Vue                          from 'vue'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
 import './TTreeItem'
 
 export default Vue.component( 'TTree', {
@@ -120,7 +119,6 @@ export default Vue.component( 'TTree', {
 
             // Todo: Externalize the sort function as use defined function. And implement current sort function as utility
             if ( ![ 'asc', 'desc' ].includes( this.sort ) ) {
-                TLogger.error( 'Invalid sorter !' )
                 return
             }
 
