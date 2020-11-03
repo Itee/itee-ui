@@ -16,13 +16,12 @@ import {
     Raycaster
 }                                   from 'three-full'
 import Vue                          from 'vue'
-import resize                       from 'vue-resize-directive'
 import { default as Stats }         from '../../../../node_modules/stats.js/src/Stats'
 import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
 
 export default Vue.component( 'TViewport3D', {
 
-    template: `<div class="tViewport3D" v-resize:debounce="_resize" @click.left="_select" @click.right="_deselect" tabindex="-1"><slot></slot></div>`,
+    template: `<div class="tViewport3D" @click.left="_select" @click.right="_deselect" tabindex="-1"><slot></slot></div>`,
 
     props: [
         'width',
@@ -46,15 +45,12 @@ export default Vue.component( 'TViewport3D', {
     data () {
 
         return {
-            frameId: undefined,
-            timer:   new Clock( true ),
-            stats:   new Stats()
+            frameId:         null,
+            resizeTimeoutId: null,
+            timer:           new Clock( true ),
+            stats:           new Stats()
         }
 
-    },
-
-    directives: {
-        resize
     },
 
     watch: {
