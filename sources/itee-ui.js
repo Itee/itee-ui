@@ -20,4 +20,4 @@ Vue.component( 'font-awesome-icon', FontAwesomeIcon )
 
 Vue.use( BootstrapVue )
 //export * from './react/_react'
-export *                   from './vue/_vue'
+export * from './vue/_vue'

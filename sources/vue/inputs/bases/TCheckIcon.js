@@ -18,12 +18,12 @@ export default Vue.component( 'TCheckIcon', {
             <input ref="checkboxInput" type="checkbox" v-bind:checked="checked" v-on:change="$emit('change', $event.target.checked)" class="d-none" />
         </div>
     `,
-    props:    [ 'id', 'iconOn', 'iconOff', 'checked' ],
-    model:    {
+    props: [ 'id', 'iconOn', 'iconOff', 'checked' ],
+    model: {
         prop:  'checked',
         event: 'change'
     },
-    methods:  {
+    methods: {
 
         _onClick ( /*event*/ ) {
             this.$refs.checkboxInput.click()

@@ -132,10 +132,10 @@ function CreateRollupConfigs ( options ) {
                     format:  format,
                     name:    name,
                     globals: {
-                        'itee-validators':      'Itee.Validators',
-                        'itee-utils':           'Itee.Utils',
-                        'three-full':           'Three',
-                        'vue':                  'Vue'
+                        'itee-validators': 'Itee.Validators',
+                        'itee-utils':      'Itee.Utils',
+                        'three-full':      'Three',
+                        'vue':             'Vue'
                     },
 
                     // advanced options

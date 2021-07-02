@@ -58,44 +58,44 @@ export default Vue.component( 'TTreeItem', {
             </ul>
         </li>
     `,
-    data:     function () {
+    data: function () {
 
         return {
             showChildren: false
         }
 
     },
-    props:    {
-        id:                {
+    props: {
+        id: {
             type:     Number,
             required: true
         },
-        name:              {
+        name: {
             type:     String,
             required: true
         },
-        isSelected:        {
+        isSelected: {
             type:    Boolean,
             default: false
         },
-        isHovered:         {
+        isHovered: {
             type:    Boolean,
             default: false
         },
-        modifiers:         {
+        modifiers: {
             type: Array
         },
-        children:          {
+        children: {
             type: Array
         },
-        filters:           {
+        filters: {
             type: Array
         },
-        sort:              {
+        sort: {
             type:    String,
             default: 'asc'
         },
-        multiSelect:       {
+        multiSelect: {
             type:    Boolean,
             default: false
         },
@@ -103,7 +103,7 @@ export default Vue.component( 'TTreeItem', {
             type:    Boolean,
             default: false
         },
-        maxDeepLevel:      {
+        maxDeepLevel: {
             type:    Number,
             default: 10
         },
@@ -200,7 +200,7 @@ export default Vue.component( 'TTreeItem', {
         }
 
     },
-    methods:  {
+    methods: {
 
         haveChildren () {
 
