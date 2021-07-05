@@ -10,9 +10,6 @@
 
 import { isDefined }                from 'itee-validators'
 import Vue                          from 'vue'
-import TContainerHorizontal from '../containers/TContainerHorizontal'
-import TIcon  from '../bases/TIcon'
-import TCheckIcon  from '../../inputs/bases/TCheckIcon'
 
 export default Vue.component( 'TTreeItem', {
     template: `

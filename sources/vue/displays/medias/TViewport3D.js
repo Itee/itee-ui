@@ -8,13 +8,7 @@
  *
  */
 
-import {
-    ArrowHelper,
-    Clock,
-    Frustum,
-    Matrix4,
-    Raycaster
-}                                   from 'three-full'
+import { Clock }                                   from 'three-full'
 import Vue                          from 'vue'
 import { default as Stats }         from '../../../../node_modules/stats.js/src/Stats'
 
