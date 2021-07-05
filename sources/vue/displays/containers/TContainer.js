@@ -9,8 +9,8 @@
  */
 
 import { isString }                 from 'itee-validators'
+import { DefaultLogger as TLogger } from 'itee-core'
 import Vue                          from 'vue'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
 import {
     TIdFactory,
     TIdFactoryType

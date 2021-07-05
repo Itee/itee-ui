@@ -55,6 +55,7 @@ function _computeIntro () {
     return '' +
         'if( iteeValidators === undefined ) { console.error(\'Itee.UI need Itee.Validators to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( iteeUtils === undefined ) { console.error(\'Itee.UI need Itee.Utils to be defined first. Please check your scripts loading order.\') }' + '\n' +
+        'if( iteeCore === undefined ) { console.error(\'Itee.UI need Itee.Core to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( threeFull === undefined ) { console.error(\'Itee.UI need Three to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( Vue === undefined ) { console.error(\'Itee.UI need Vue to be defined first. Please check your scripts loading order.\') }' + '\n'
 
@@ -95,6 +96,7 @@ function CreateRollupConfigs ( options ) {
                 external: [
                     'itee-utils',
                     'itee-validators',
+                    'itee-core',
                     'vue',
                     'three-full'
                 ],
@@ -134,6 +136,7 @@ function CreateRollupConfigs ( options ) {
                     globals: {
                         'itee-validators': 'Itee.Validators',
                         'itee-utils':      'Itee.Utils',
+                        'itee-core':       'Itee.Core',
                         'three-full':      'Three',
                         'vue':             'Vue'
                     },

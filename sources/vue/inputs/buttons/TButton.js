@@ -11,7 +11,7 @@
 import { isDefined }                from 'itee-validators'
 //import { isDefined }                from 'itee-validators/sources/cores/voids/isDefined'
 import Vue                          from 'vue'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
+import { DefaultLogger as TLogger } from 'itee-core'
 import {
     TIdFactory,
     TIdFactoryType

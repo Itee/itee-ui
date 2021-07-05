@@ -17,7 +17,6 @@ import {
 }                                   from 'three-full'
 import Vue                          from 'vue'
 import { default as Stats }         from '../../../../node_modules/stats.js/src/Stats'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
 
 export default Vue.component( 'TViewport3D', {
 

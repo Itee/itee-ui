@@ -9,7 +9,7 @@
  */
 
 import Vue                          from 'vue'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
+import { DefaultLogger as TLogger } from 'itee-core'
 
 export default Vue.component( 'TItemList', {
     template: `
