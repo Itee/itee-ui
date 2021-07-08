@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/Itee/itee-ui/compare/v1.2.0...v1.2.1) (2021-07-08)
+
+
+### Bug Fixes
+
+* **rollupconfig:** remove js map for production env ([760fbdb](https://github.com/Itee/itee-ui/commit/760fbdb2bb315e5871423661b0111e42399ae005))
+
 # [1.2.0](https://github.com/Itee/itee-ui/compare/v1.1.2...v1.2.0) (2021-07-08)
 
 
