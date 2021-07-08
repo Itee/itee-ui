@@ -12,11 +12,11 @@
  * @requires {@link module: [rollup-plugin-terser]{@link https://github.com/TrySound/rollup-plugin-terser}}
  */
 
-const packageInfos = require( '../package' )
-const commonjs     = require( 'rollup-plugin-commonjs' )
-const path         = require( 'path' )
-const resolve      = require( 'rollup-plugin-node-resolve' )
-const terser       = require( 'rollup-plugin-terser' ).terser
+const packageInfos    = require( '../package' )
+const path            = require( 'path' )
+const commonjs        = require( '@rollup/plugin-commonjs' )
+const { nodeResolve } = require( '@rollup/plugin-node-resolve' )
+const terser          = require( 'rollup-plugin-terser' ).terser
 
 function _computeBanner ( name, format ) {
 
@@ -55,6 +55,7 @@ function _computeIntro () {
     return '' +
         'if( iteeValidators === undefined ) { console.error(\'Itee.UI need Itee.Validators to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( iteeUtils === undefined ) { console.error(\'Itee.UI need Itee.Utils to be defined first. Please check your scripts loading order.\') }' + '\n' +
+        'if( iteeCore === undefined ) { console.error(\'Itee.UI need Itee.Core to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( threeFull === undefined ) { console.error(\'Itee.UI need Three to be defined first. Please check your scripts loading order.\') }' + '\n' +
         'if( Vue === undefined ) { console.error(\'Itee.UI need Vue to be defined first. Please check your scripts loading order.\') }' + '\n'
 
@@ -95,6 +96,7 @@ function CreateRollupConfigs ( options ) {
                 external: [
                     'itee-utils',
                     'itee-validators',
+                    'itee-core',
                     'vue',
                     'three-full'
                 ],
@@ -102,7 +104,7 @@ function CreateRollupConfigs ( options ) {
                     commonjs( {
                         include: 'node_modules/**'
                     } ),
-                    resolve( {
+                    nodeResolve( {
                         preferBuiltins: true
                     } ),
                     isProd && terser()
@@ -132,10 +134,11 @@ function CreateRollupConfigs ( options ) {
                     format:  format,
                     name:    name,
                     globals: {
-                        'itee-validators':      'Itee.Validators',
-                        'itee-utils':           'Itee.Utils',
-                        'three-full':           'Three',
-                        'vue':                  'Vue'
+                        'itee-validators': 'Itee.Validators',
+                        'itee-utils':      'Itee.Utils',
+                        'itee-core':       'Itee.Core',
+                        'three-full':      'Three',
+                        'vue':             'Vue'
                     },
 
                     // advanced options

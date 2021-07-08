@@ -9,20 +9,16 @@
  */
 
 import Vue                          from 'vue'
-import resize                       from 'vue-resize-directive'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
+import { DefaultLogger as TLogger } from 'itee-core'
 
 export default Vue.component( 'TSplitter', {
     template: `
-        <div :class=computeClass :style=computeSplitterStyle @mousemove=onMouseMoveHandler @mouseup=onMouseUpHandler @mouseleave=onMouseUpHandler v-resize:debounce="onResize">
+        <div :class=computeClass :style=computeSplitterStyle @mousemove=onMouseMoveHandler @mouseup=onMouseUpHandler @mouseleave=onMouseUpHandler>
             <slot name="left"></slot>
             <div class="tSplitterSeparator" :style=computeSeparatorStyle @mousedown=onMouseDownHandler></div>
             <slot name="right"></slot>
         </div>
     `,
-    directives: {
-        resize
-    },
     data: function () {
 
         return {

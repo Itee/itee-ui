@@ -336,7 +336,6 @@ const HomePage = {
         },
         removeTreeItem ( /*parent*/ ) {
             'use strict'
-            console.log( 'remove item' )
         },
         filterTreeItem ( item ) {
             'use strict'
@@ -500,9 +499,7 @@ const UploadPage = {
 
             }
 
-            function onLoad ( loadEvent ) {
-
-                console.log( loadEvent )
+            function onLoad ( /*loadEvent*/ ) {
 
             }
 
@@ -573,8 +570,6 @@ const UploadPage = {
 
                         //						view.setWarning( 'Impossible de trouver le fichier ' + associateFileName + ' à associer...' )
                         //						continue
-
-                        console.warn( 'Impossible de trouver le fichier ' + associateFileName + ' à associer...' )
 
                         this.upload( this.convertFileToFormData( file ), 'POST', '../uploads', view )
 

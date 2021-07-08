@@ -302,7 +302,6 @@ window.TConfigParameters = {
         },
         removeTreeItem ( /*parent*/ ) {
             'use strict'
-            console.log( 'remove item' )
         },
         filterTreeItem ( item ) {
             'use strict'

@@ -9,7 +9,6 @@
  */
 
 import Vue                          from 'vue'
-import { DefaultLogger as TLogger } from '../../../loggers/TLogger'
 import './TTreeItem'
 
 export default Vue.component( 'TTree', {
@@ -40,17 +39,17 @@ export default Vue.component( 'TTree', {
         </TContainerVertical>
     `,
     props: {
-        items:           {
+        items: {
             type: Array
         },
-        filters:           {
+        filters: {
             type: Array
         },
-        sort:              {
+        sort: {
             type:    String,
             default: 'asc'
         },
-        multiSelect:       {
+        multiSelect: {
             type:    Boolean,
             default: false
         },
@@ -58,11 +57,11 @@ export default Vue.component( 'TTree', {
             type:    Boolean,
             default: false
         },
-        minDeepLevel:      {
+        minDeepLevel: {
             type:    Number,
             default: 0
         },
-        maxDeepLevel:      {
+        maxDeepLevel: {
             type:    Number,
             default: 10
         }
@@ -90,7 +89,7 @@ export default Vue.component( 'TTree', {
         }
 
     },
-    methods:  {
+    methods: {
 
         haveItems () {
 
@@ -120,7 +119,6 @@ export default Vue.component( 'TTree', {
 
             // Todo: Externalize the sort function as use defined function. And implement current sort function as utility
             if ( ![ 'asc', 'desc' ].includes( this.sort ) ) {
-                TLogger.error( 'Invalid sorter !' )
                 return
             }
 

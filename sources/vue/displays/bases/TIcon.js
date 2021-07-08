@@ -13,7 +13,7 @@ import Vue                 from 'vue'
 
 // Todo: implement router facility here using target instead of clickHandler !
 export default Vue.component( 'TIcon', {
-    template:   `
+    template: `
         <font-awesome-icon :icon="icon" v-on="$listeners" />
     `,
     props:      [ 'id', 'icon' ],
