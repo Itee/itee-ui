@@ -1,3 +1,21 @@
+# [1.2.0](https://github.com/Itee/itee-ui/compare/v1.1.2...v1.2.0) (2021-07-08)
+
+
+### Bug Fixes
+
+* **eslint:** fix eslint error and warning about unused import and usages ([4341560](https://github.com/Itee/itee-ui/commit/434156074ea179c66223b88cf6e4d1f2162314c0))
+* **package:** apply dependencies fix ([b729538](https://github.com/Itee/itee-ui/commit/b7295388a6fd33acacac3fc003e83ba43df6a934))
+* **package:** apply fix from dependencies ([a26f873](https://github.com/Itee/itee-ui/commit/a26f873065ccd5be401c09a2a00dd964bc42b1ab))
+* **package:** apply npm audit fix ([d488ae1](https://github.com/Itee/itee-ui/commit/d488ae145384b66a441802c371d69f5ba1e690f4))
+* **package:** update all dependencies to their latest version ([d6bbf67](https://github.com/Itee/itee-ui/commit/d6bbf67aabb6aea5906b2a29b5234bba5ae321b0))
+* **releaserc:** fix missing dev maps ([ce73430](https://github.com/Itee/itee-ui/commit/ce73430ba4d1c82554f1c564329f568ac1c9864a))
+* **sass:** fix gulp-sass usage and use sass as default parser ([23f62b9](https://github.com/Itee/itee-ui/commit/23f62b9f3baf85aabd4aa5afdb5de349e22ce124))
+
+
+### Features
+
+* **global:** remove local TLogger implementation in favor of itee-core package ([300ce15](https://github.com/Itee/itee-ui/commit/300ce155e444ca90c17ff72cd92b9f4f50645eb4))
+
 ## [1.1.2](https://github.com/Itee/itee-ui/compare/v1.1.1...v1.1.2) (2019-10-21)
 
 
