@@ -1,4 +1,4 @@
-console.log('Itee.UI v1.2.1 - Standalone')
+console.log('Itee.UI v1.3.0 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.UI = (function (exports, Vue, iteeValidators, iteeCore, threeFull) {
 	'use strict';

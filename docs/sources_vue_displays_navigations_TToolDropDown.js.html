@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Itee-UI Source: sources/vue/displays/navigations/TToolDropDown.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Itee-UI</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="module-Building.html">Building</a></li><li><a href="module-Config-EsLint.html">Config-EsLint</a></li><li><a href="module-Config-JsDoc.html">Config-JsDoc</a></li><li><a href="module-Config-Karma-Benchs.html">Config-Karma-Benchs</a></li><li><a href="module-Config-Karma-Units.html">Config-Karma-Units</a></li><li><a href="module-Config-Rollup.html">Config-Rollup</a></li><li><a href="module-Config-Rollup-Test.html">Config-Rollup-Test</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="TAppBar.html">TAppBar</a></li><li><a href="TDateTime.html">TDateTime</a></li><li><a href="TToolBar.html">TToolBar</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-style">npm run build-style</a></li><li><a href="global.html#npmrunbuild-style-dev">npm run build-style-dev</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#npmrunwatch-style">npm run watch-style</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: sources/vue/displays/navigations/TToolDropDown.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+import Vue from 'vue'
+
+export default Vue.component( 'TToolDropDown', {
+    template: `
+        &lt;div :class=computeClass :title=tooltip @mouseenter=onMouseEnterHandler @mouseleave=onMouseLeaveHandler>
+            &lt;TLabel class="tDropDownLabel" :label=label :icon=icon>&lt;/TLabel>
+            &lt;div class="tDropDownContent" :style=computeContentStyle>
+                &lt;slot>&lt;/slot>
+            &lt;/div>
+        &lt;/div>
+    `,
+    data: function () {
+
+        return {
+            isHover:       true,
+            isVisible:     false,
+            contentHeight: 0,
+            contentWidth:  0
+        }
+
+    },
+    props:    [ 'popAt', 'icon', 'label', 'tooltip', 'isActive' ],
+    computed: {
+
+        computeClass () {
+
+            let classList = 'tToolDropDown'
+
+            switch ( this.popAt ) {
+
+                case 'top':
+                    classList += ' popAtTop'
+                    break
+
+                case 'topRight':
+                    classList += ' popAtTopRight'
+                    break
+
+                case 'topRightCorner':
+                    classList += ' popAtTopRightCorner'
+                    break
+
+                case 'rightUp':
+                    classList += ' popAtRightUp'
+                    break
+
+                case 'right':
+                    classList += ' popAtRight'
+                    break
+
+                case 'rightDown':
+                    classList += ' popAtRightDown'
+                    break
+
+                case 'bottomRightCorner':
+                    classList += ' popAtBottomRightCorner'
+                    break
+
+                case 'bottomRight':
+                    classList += ' popAtBottomRight'
+                    break
+
+                case 'bottom':
+                    classList += ' popAtBottom'
+                    break
+
+                case 'bottomLeft':
+                    classList += ' popAtBottomLeft'
+                    break
+
+                case 'bottomLeftCorner':
+                    classList += ' popAtBottomLeftCorner'
+                    break
+
+                case 'leftDown':
+                    classList += ' popAtLeftDown'
+                    break
+
+                case 'left':
+                    classList += ' popAtLeft'
+                    break
+
+                case 'leftUp':
+                    classList += ' popAtLeftUp'
+                    break
+
+                case 'topLeftCorner':
+                    classList += ' popAtTopLeftCorner'
+                    break
+
+                case 'topLeft':
+                    classList += ' popAtTopLeft'
+                    break
+
+                default:
+                    throw new RangeError( `Invalid switch parameter: ${this.popAt}`, 'TDropDownMenu' )
+
+            }
+
+            if ( this.isActive ) {
+                classList += ' isActive'
+            }
+
+            return classList
+
+        },
+
+        computeContentStyle () {
+
+            let _contentStyle = {
+                position:   'absolute',
+                //                minWidth: '100%',
+                display:    ( this.isHover ) ? 'block' : 'none',
+                visibility: ( this.isVisible ) ? 'visible' : 'hidden'
+            }
+
+            const thisElement = this.$el
+            if ( !thisElement ) {
+                return _contentStyle
+            }
+
+            const offsetTop     = thisElement.offsetTop
+            const offsetLeft    = thisElement.offsetLeft
+            const offsetHeight  = thisElement.offsetHeight
+            const offsetWidth   = thisElement.offsetWidth
+            const contentHeight = this.contentHeight
+            const contentWidth  = this.contentWidth
+            let top             = 0
+            let left            = 0
+
+            // Todo: check if poped ele is not out of screen bounds !
+            switch ( this.popAt ) {
+
+                case 'top':
+                    top  = offsetTop - contentHeight
+                    left = offsetLeft + ( ( offsetWidth / 2 ) - ( contentWidth / 2 ) )
+                    break
+
+                case 'topRight':
+                    top  = offsetTop - contentHeight
+                    left = offsetLeft + offsetWidth - contentWidth
+                    break
+
+                case 'topRightCorner':
+                    top  = offsetTop - contentHeight
+                    left = offsetLeft + offsetWidth
+                    break
+
+                case 'rightUp':
+                    top  = offsetTop
+                    left = offsetLeft + offsetWidth
+                    break
+
+                case 'right':
+                    top  = offsetTop + ( offsetHeight / 2 ) - ( contentHeight / 2 )
+                    left = offsetLeft + offsetWidth
+                    break
+
+                case 'rightDown':
+                    top  = offsetTop + offsetHeight - contentHeight
+                    left = offsetLeft + offsetWidth
+                    break
+
+                case 'bottomRightCorner':
+                    top  = offsetTop + offsetHeight
+                    left = offsetLeft + offsetWidth
+                    break
+
+                case 'bottomRight':
+                    top  = offsetTop + offsetHeight
+                    left = offsetLeft + offsetWidth - contentWidth
+                    break
+
+                case 'bottom':
+                    top  = offsetTop + offsetHeight
+                    left = offsetLeft + ( offsetWidth / 2 ) - ( contentWidth / 2 )
+                    break
+
+                case 'bottomLeft':
+                    top  = offsetTop + offsetHeight
+                    left = offsetLeft
+                    break
+
+                case 'bottomLeftCorner':
+                    top  = offsetTop + offsetHeight
+                    left = offsetLeft - contentWidth
+                    break
+
+                case 'leftDown':
+                    top  = offsetTop + offsetHeight - contentHeight
+                    left = offsetLeft - contentWidth
+                    break
+
+                case 'left':
+                    top  = offsetTop + ( ( offsetHeight / 2 ) - ( contentHeight / 2 ) )
+                    left = offsetLeft - contentWidth
+                    break
+
+                case 'leftUp':
+                    top  = offsetTop
+                    left = offsetLeft - contentWidth
+                    break
+
+                case 'topLeftCorner':
+                    top  = offsetTop - contentHeight
+                    left = offsetLeft - contentWidth
+                    break
+
+                case 'topLeft':
+                    top  = offsetTop - contentHeight
+                    left = offsetLeft
+                    break
+
+                default:
+                    throw new RangeError( `Invalid switch parameter: ${this.popAt}`, 'TDropDownMenu' )
+
+            }
+
+            _contentStyle.top  = `${top}px`
+            _contentStyle.left = `${left}px`
+
+            return _contentStyle
+
+        }
+
+    },
+    mounted () {
+
+        // Trick to get tDropDownContent size
+        this.isHover   = false
+        this.isVisible = true
+
+        const dropDownContent = this.$el.lastChild
+        this.contentHeight    = dropDownContent.offsetHeight
+        this.contentWidth     = dropDownContent.offsetWidth
+
+    },
+    methods: {
+
+        onMouseEnterHandler ( event ) {
+
+            this.isHover = true
+            event.preventDefault()
+
+        },
+
+        onMouseLeaveHandler ( event ) {
+
+            this.isHover = false
+            event.preventDefault()
+
+        }
+
+    }
+
+} )
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
