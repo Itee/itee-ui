@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/Itee/itee-ui/compare/v1.2.1...v1.3.0) (2021-07-21)
+
+
+### Bug Fixes
+
+* **readme:** fix readme tags ([2da4286](https://github.com/Itee/itee-ui/commit/2da4286a41879765a332d7274e7345a6e8a3d75b))
+
+
+### Features
+
+* **style:** add default styling and forward bootstrap variable for override ([d1e80ae](https://github.com/Itee/itee-ui/commit/d1e80ae4e0f3ca148d01d5eaa2687600ddeb2236))
+
 ## [1.2.1](https://github.com/Itee/itee-ui/compare/v1.2.0...v1.2.1) (2021-07-08)
 
 

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Itee-UI Source: sources/vue/displays/splitters/TSplitter.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Itee-UI</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="module-Building.html">Building</a></li><li><a href="module-Config-EsLint.html">Config-EsLint</a></li><li><a href="module-Config-JsDoc.html">Config-JsDoc</a></li><li><a href="module-Config-Karma-Benchs.html">Config-Karma-Benchs</a></li><li><a href="module-Config-Karma-Units.html">Config-Karma-Units</a></li><li><a href="module-Config-Rollup.html">Config-Rollup</a></li><li><a href="module-Config-Rollup-Test.html">Config-Rollup-Test</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="TAppBar.html">TAppBar</a></li><li><a href="TDateTime.html">TDateTime</a></li><li><a href="TToolBar.html">TToolBar</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-style">npm run build-style</a></li><li><a href="global.html#npmrunbuild-style-dev">npm run build-style-dev</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#npmrunwatch-style">npm run watch-style</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: sources/vue/displays/splitters/TSplitter.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+import Vue                          from 'vue'
+import { DefaultLogger as TLogger } from 'itee-core'
+
+export default Vue.component( 'TSplitter', {
+    template: `
+        &lt;div :class=computeClass :style=computeSplitterStyle @mousemove=onMouseMoveHandler @mouseup=onMouseUpHandler @mouseleave=onMouseUpHandler>
+            &lt;slot name="left">&lt;/slot>
+            &lt;div class="tSplitterSeparator" :style=computeSeparatorStyle @mousedown=onMouseDownHandler>&lt;/div>
+            &lt;slot name="right">&lt;/slot>
+        &lt;/div>
+    `,
+    data: function () {
+
+        return {
+            onTracking:             false,
+            previousMousePositionX: 0,
+            previousMousePositionY: 0,
+            position:               ( this.initPosition ) ? this.initPosition : 50
+        }
+
+    },
+    props:    [ 'initPosition', 'isVertical' ],
+    computed: {
+
+        computeClass () {
+
+            return ( this.isVertical ) ? 'tSplitter tSplitterVertical' : 'tSplitter tSplitterHorizontal'
+
+        },
+
+        computeSplitterStyle () {
+
+            return {
+                display:  'flex',
+                flexFlow: ( this.isVertical ) ? 'row' : 'column',
+                overflow: 'hidden',
+                flex:     1
+            }
+
+        },
+
+        computeSeparatorStyle () {
+
+            let _separatorStyle = {
+                //                display: 'flex'
+            }
+
+            if ( this.isVertical ) {
+
+                _separatorStyle = {
+                    minWidth: '1px',
+                    cursor:   'col-resize'
+                }
+
+            } else {
+
+                _separatorStyle = {
+                    minHeight: '1px',
+                    cursor:    'row-resize'
+                }
+
+            }
+
+            return _separatorStyle
+
+        }
+
+    },
+    methods: {
+
+        onResize () {
+
+            const domElement              = this.$el
+            const globalWidth             = domElement.offsetWidth
+            const globalHeight            = domElement.offsetHeight
+            const currentSplitterPosition = this.position
+
+            const firstSplit             = domElement.children[ 0 ]
+            const firstSplitBorderWidth  = firstSplit.offsetWidth - firstSplit.clientWidth
+            const firstSplitBorderHeight = firstSplit.offsetHeight - firstSplit.clientHeight
+            let firstSplitWidth          = undefined
+            let firstSplitHeight         = undefined
+
+            const splitterElement             = domElement.children[ 1 ]
+            const splitterElementBorderWidth  = splitterElement.offsetWidth - splitterElement.clientWidth
+            const splitterElementBorderHeight = splitterElement.offsetHeight - splitterElement.clientHeight
+            let splitterWidth                 = undefined
+            let splitterHeight                = undefined
+
+            const secondSplit             = domElement.children[ 2 ]
+            const secondSplitBorderWidth  = secondSplit.offsetWidth - secondSplit.clientWidth
+            const secondSplitBorderHeight = secondSplit.offsetHeight - secondSplit.clientHeight
+            let secondSplitWidth          = undefined
+            let secondSplitHeight         = undefined
+
+            if ( this.isVertical ) {
+
+                firstSplitWidth  = Math.round( ( domElement.offsetWidth / 100 ) * currentSplitterPosition ) - firstSplitBorderWidth
+                firstSplitHeight = globalHeight - firstSplitBorderHeight
+
+                splitterWidth  = splitterElement.offsetWidth - splitterElementBorderWidth
+                splitterHeight = globalHeight - splitterElementBorderHeight
+
+                secondSplitWidth  = ( Math.round( ( domElement.offsetWidth / 100 ) * ( 100 - currentSplitterPosition ) ) ) - secondSplitBorderWidth - splitterElement.offsetWidth
+                secondSplitHeight = globalHeight - secondSplitBorderHeight
+
+            } else {
+
+                firstSplitWidth  = globalWidth - firstSplitBorderWidth
+                firstSplitHeight = Math.round( ( domElement.offsetHeight / 100 ) * currentSplitterPosition ) - firstSplitBorderHeight
+
+                splitterWidth  = globalWidth - splitterElementBorderWidth
+                splitterHeight = splitterElement.offsetHeight - splitterElementBorderHeight
+
+                secondSplitWidth  = globalWidth - secondSplitBorderWidth
+                secondSplitHeight = ( Math.round( ( domElement.offsetHeight / 100 ) * ( 100 - currentSplitterPosition ) ) ) - secondSplitBorderHeight - splitterElement.offsetHeight
+
+            }
+
+            firstSplit.style.width  = `${firstSplitWidth}px`
+            firstSplit.style.height = `${firstSplitHeight}px`
+            TLogger.debug( `TSplitter.onResize(fW/fH): ${firstSplitWidth}/${firstSplitHeight}` )
+
+            splitterElement.style.width  = `${splitterWidth}px`
+            splitterElement.style.height = `${splitterHeight}px`
+            TLogger.debug( `TSplitter.onResize(spW/spH): ${splitterWidth}/${splitterHeight}` )
+
+            secondSplit.style.width  = `${secondSplitWidth}px`
+            secondSplit.style.height = `${secondSplitHeight}px`
+            TLogger.debug( `TSplitter.onResize(sW/sH): ${secondSplitWidth}/${secondSplitHeight}` )
+
+        },
+
+        onMouseDownHandler ( event ) {
+
+            this.onTracking             = true
+            this.previousMousePositionX = event.clientX
+            this.previousMousePositionY = event.clientY
+
+            event.preventDefault()
+
+        },
+
+        onMouseMoveHandler ( event ) {
+
+            if ( !this.onTracking ) {
+                return
+            }
+
+            const domElement      = this.$el
+            const firstSplit      = domElement.children[ 0 ]
+            const splitterElement = domElement.children[ 1 ]
+            const secondSplit     = domElement.children[ 2 ]
+
+            if ( this.isVertical ) {
+
+                const deltaX   = event.clientX - this.previousMousePositionX
+                let firstWidth = firstSplit.offsetWidth + deltaX
+                if ( firstWidth &lt; 0 ) {
+                    firstWidth = 0
+                }
+
+                const secondWidth  = domElement.offsetWidth - firstWidth - splitterElement.offsetWidth
+                const globalHeight = domElement.offsetHeight
+
+                firstSplit.style.width  = `${firstWidth}px`
+                firstSplit.style.height = `${globalHeight}px`
+
+                splitterElement.style.height = `${globalHeight}px`
+
+                secondSplit.style.width  = `${secondWidth}px`
+                secondSplit.style.height = `${globalHeight}px`
+
+                TLogger.debug( `TSplitter.onMouseMoveHandler(fw/sw): ${firstWidth}/${secondWidth}` )
+
+                this.previousMousePositionX = event.clientX
+
+            } else {
+
+                const deltaY    = event.clientY - this.previousMousePositionY
+                let firstHeight = firstSplit.offsetHeight + deltaY
+                if ( firstHeight &lt; 0 ) {
+                    firstHeight = 0
+                }
+
+                const secondHeight = domElement.offsetHeight - firstHeight - splitterElement.offsetHeight
+                const globalWidth  = domElement.offsetWidth
+
+                firstSplit.style.height = `${firstHeight}px`
+                firstSplit.style.width  = `${globalWidth}px`
+
+                splitterElement.style.width = `${globalWidth}px`
+
+                secondSplit.style.height = `${secondHeight}px`
+                secondSplit.style.width  = `${globalWidth}px`
+
+                TLogger.debug( `TSplitter.onMouseMoveHandler(fh/sh): ${firstHeight}/${secondHeight}` )
+
+                this.previousMousePositionY = event.clientY
+
+            }
+
+            event.preventDefault()
+
+        },
+
+        onMouseUpHandler ( event ) {
+
+            this.onTracking = false
+            event.preventDefault()
+
+        }
+
+    },
+    mounted () {
+
+        const domElement      = this.$el
+        const firstSplit      = domElement.children[ 0 ]
+        const splitterElement = domElement.children[ 1 ]
+        const secondSplit     = domElement.children[ 2 ]
+
+        const currentSplitterPosition = this.position
+
+        if ( this.isVertical ) {
+
+            const firstWidth    = Math.round( ( domElement.offsetWidth / 100 ) * currentSplitterPosition )
+            const splitterWidth = splitterElement.offsetWidth
+            const secondWidth   = ( Math.round( ( domElement.offsetWidth / 100 ) * ( 100 - currentSplitterPosition ) ) ) - splitterWidth
+            const globalHeight  = domElement.offsetHeight
+
+            firstSplit.style.width  = `${firstWidth}px`
+            firstSplit.style.height = `${globalHeight}px`
+
+            splitterElement.style.height = `${globalHeight}px`
+
+            secondSplit.style.width  = `${secondWidth}px`
+            secondSplit.style.height = `${globalHeight}px`
+
+            TLogger.debug( `TSplitter.mounted(fw/sw): ${firstWidth}/${secondWidth}` )
+
+        } else {
+
+            const firstHeight    = Math.round( ( domElement.offsetHeight / 100 ) * currentSplitterPosition )
+            const splitterHeight = splitterElement.offsetHeight
+            const secondHeight   = ( Math.round( ( domElement.offsetHeight / 100 ) * ( 100 - currentSplitterPosition ) ) ) - splitterHeight
+            const globalWidth    = domElement.offsetWidth
+
+            firstSplit.style.height = `${firstHeight}px`
+            firstSplit.style.width  = `${globalWidth}px`
+
+            splitterElement.style.width = `${globalWidth}px`
+
+            secondSplit.style.height = `${secondHeight}px`
+            secondSplit.style.width  = `${globalWidth}px`
+
+            TLogger.debug( `TSplitter.mounted(fh/sh): ${firstHeight}/${secondHeight}` )
+
+        }
+
+    }
+
+} )
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
