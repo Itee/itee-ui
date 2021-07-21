@@ -1,10 +1,900 @@
+// Option A: Include all of Bootstrap
+
+// Include any default variable overrides here (though functions won't be available)
+//$primary: #c90aff !default;
+//$secondary: #c90aff !default;
+//$success: #c90aff !default;
+//$info: #c90aff !default;
+//$warning: #c90aff !default;
+//$danger: #c90aff !default;
+//$light: #c90aff !default;
+//$dark: #c90aff !default;
+
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+// Then add thirdparties
+@import "./node_modules/bootstrap-vue/src/index.scss";
+// ...
+
+// Then add additional custom code here
+// ...
+
+html, body {
+  font-family: 'Arial';
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  background-color: #4b4b4b;
+}
 
 
-// Include bootstrap first
-@import "node_modules/bootstrap/scss/bootstrap.scss";
 
-// Then bootstrap-vue specific stuff
-@import "node_modules/bootstrap-vue/src/index.scss";
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
 
-// And finally custom SCSS for our components
-//@import "components/index";
+::-webkit-scrollbar-button {
+  display: none;
+  height: 13px;
+  border-radius: 0px;
+  background-color: #aaaaaa;
+}
+
+::-webkit-scrollbar-button:hover {
+  background-color: #aaaaaa;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #247bff;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #5465fc;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #d3d3d3;
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: #d2d2d2;
+}
+
+
+
+
+#itee-application-root {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+
+// Utils
+.stretchChildren > * {
+  flex: 1;
+}
+
+
+
+// Global objects
+.tHeader {
+  //position: relative;
+  z-index: 3;
+  /*box-shadow: 0px -7px 10px 7px rgb(0, 0, 0);*/
+  color: white;
+
+  .tAppBar {
+    //position:         relative;
+    z-index: 3;
+    background-color: rgb(100, 100, 100);
+    box-shadow: 0px -7px 10px 7px rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(75, 75, 75);
+    height: 60px;
+
+    .tBrand {
+      padding-left: 10px;
+      font-size: 2.0em;
+    }
+
+    .tMenu {
+      font-size: 2.0em;
+
+      .tMenuItem {
+        padding: 5px 16px;
+
+        &:hover, &.isActive {
+          margin-bottom: -1px;
+          border-bottom: 1px solid #4eaeff;
+          background-color: rgba(150, 150, 150, 1);
+        }
+
+        > * {
+          cursor: pointer;
+        }
+
+      }
+
+      .tMenuDropDown {
+        padding: 5px 16px;
+
+        &:hover {
+          background-color: rgba(150, 150, 150, 1);
+        }
+
+        &.popAtRightUp:hover {
+          margin-right: -1px;
+          border-right: 1px solid #4eaeff;
+        }
+
+        &.popAtTop:hover {
+          margin-top: -1px;
+          border-top: 1px solid #4eaeff;
+        }
+
+        &.popAtBottom:hover {
+          margin-bottom: -1px;
+          border-bottom: 1px solid #4eaeff;
+        }
+
+        .tDropDownLabel {
+          cursor: pointer;
+        }
+
+        .tDropDownContent {
+          background-color: #323232f2;
+          box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+          font-size: 20px;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.tToolBar {
+  z-index: 2;
+  background-color: rgb(50, 50, 50);
+  font-size: 1.6em;
+  color: #efefef;
+  min-height: 50px;
+  max-height: 50px;
+
+  .tToolItem {
+
+    display: flex;
+    align-items: center;
+    //margin-top: -1px;
+    padding: 12px 15px;
+    cursor: pointer;
+
+    &:not(.disabled):hover, &:not(.disabled).isActive {
+      margin-top: -1px;
+      //margin-bottom: -1px;
+      border-bottom: 1px solid #4eaeff;
+      background-color: rgba(150, 150, 150, 1);
+
+      .tToolIcon {
+        margin-bottom: -1px;
+      }
+
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      margin-top: -1px;
+      //margin-bottom: -1px;
+      border-bottom: 1px solid #ff2b1c;
+      background-color: rgb(95, 95, 95);
+
+      > * {
+        cursor: not-allowed;
+      }
+
+    }
+
+    > * {
+      cursor: pointer;
+    }
+
+    .tToolIcon {
+      margin-right: 5px;
+    }
+
+  }
+
+  .tToolDropDown {
+
+    padding: 6px 16px;
+    //margin-top: -1px;
+
+    &:not(.disabled):hover, &:not(.disabled).isActive {
+      background-color: rgba(150, 150, 150, 1);
+    }
+
+    &.popAtTopLeft:hover,
+    &.popAtTop:hover,
+    &.popAtTopRight:hover {
+      margin-top: -1px;
+      border-top: 1px solid #4eaeff;
+    }
+
+    &.popAtRightUp:hover,
+    &.popAtRight:hover,
+    &.popAtRightDown:hover {
+      margin-right: -1px;
+      border-right: 1px solid #4eaeff;
+    }
+
+    &.popAtBottomRight:hover,
+    &.popAtBottom:hover,
+    &.popAtBottomLeft:hover {
+      margin-top: -1px;
+      //margin-bottom: -1px;
+      border-bottom: 1px solid #4eaeff;
+    }
+
+    &.popAtLeftDown:hover,
+    &.popAtLeft:hover,
+    &.popAtLeftUp:hover {
+      margin-left: -1px;
+      border-left: 1px solid #4eaeff;
+    }
+
+    .tDropDownLabel {
+      cursor: pointer;
+    }
+
+    .tDropDownContent {
+      background-color: #323232f2;
+      box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+      font-size: 20px;
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      margin-bottom: -1px;
+      border-bottom: 1px solid #ff2b1c;
+      background-color: rgb(95, 95, 95);
+
+      > * {
+        cursor: not-allowed;
+      }
+
+    }
+
+  }
+
+}
+
+.tContent {
+  background-color: rgb(35, 35, 35);
+  color: rgb(200, 200, 200);
+}
+
+.tFooter {
+  background-color: rgb(50, 50, 50);
+
+  .tStatusBar {
+    background-color: rgb(50, 50, 50);
+    /*borderTop:       1px solid rgb(30, 30, 30);*/
+  }
+
+}
+
+.tDividerVertical {
+  height: 30px;
+  min-width: 1px;
+  background-color: #9d9d9d;
+  margin: 5px 0px;
+}
+
+.tDividerHorizontal {
+  min-height: 1px;
+  background-color: #9d9d9d;
+  margin: 5px 0px;
+}
+
+/* DIALOG */
+
+.dialog {
+  box-shadow: 4px 4px 7px 1px;
+}
+
+.dialog .header {
+  padding: 5px;
+  color: white;
+  font-size: 1.6em;
+  background-color: rgb(50, 50, 50);
+}
+
+.dialog .content .fa {
+  font-size: 16em;
+}
+
+.dialog.login-dialog .footer button {
+  flex-basis: 100%;
+}
+
+/* SEPARATOR */
+.tSplitter {
+
+  &.tSplitterVertical {
+
+    .tSplit {
+      border: 1px inset rgb(65, 65, 65);
+    }
+
+    .tLeftSplit {
+      border-left: none;
+      border-bottom: 1px inset rgb(65, 65, 65);
+    }
+
+    .tRightSplit {
+      border-right: none;
+      border-bottom: 1px inset rgb(65, 65, 65);
+    }
+
+    .tSplitterSeparator {
+      width: 3px;
+      background-color: rgb(50, 50, 50);
+    }
+
+  }
+
+  &.tSplitterHorizontal {
+
+    .tSplitterSeparator {
+      border-top: 1px outset rgb(65, 65, 65);
+      border-bottom: 1px outset rgb(65, 65, 65);
+      height: 3px;
+      background-color: rgb(50, 50, 50);
+    }
+
+  }
+
+}
+
+/* Tree */
+.tTree {
+
+  //margin-left: -1px;
+  //border-top: 1px inset red;
+  //border-right: 1px inset red;
+  //border-bottom: 1px inset red;
+
+  ul.tTreeItemChildren {
+    width: 100%;
+    list-style-type: none;
+    padding-left: 14px;
+
+    &.multiChild li.tTreeItem:not(:last-child) ul.tTreeItemChildren {
+      padding-left: 6px;
+      border-left: 2px dashed #656565;
+      margin-left: 5px;
+
+      .tTreeItemModifiers {
+        padding-left: 8px;
+      }
+
+    }
+
+    li.tTreeItem {
+      user-select: none;
+      min-height: 20px;
+      margin-right: 1%;
+
+      &.selectedChildren {
+        background-color: #006dc6;
+        border-radius: 5px;
+        //padding-left:     5px;
+        padding-right: 5px;
+      }
+
+      &:last-child {
+
+        > .tTreeItemContent::before {
+          content: "\2514";
+        }
+
+      }
+
+      .tTreeItemContent {
+
+        &.selected {
+          background-color: #006dc6;
+          border-radius: 5px;
+          //padding-left:     5px;
+          padding-right: 5px;
+        }
+
+        &::before {
+          content: "\251C";
+        }
+
+        i {
+          min-width: 16px;
+          min-height: 16px;
+        }
+
+        label {
+          padding-left: 5px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        label + .tTreeItemModifiers {
+          margin-left: auto;
+        }
+
+        .tTreeItemModifiers {
+          padding-left: 5px;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.tViewport3D {
+  outline: 0;
+}
+
+/* Generated by Paletton.com Â© 2002-2014 */
+/* http://paletton.com */
+
+/*// LOGIN BUTTON*/
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  display: none;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cccccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  //margin: 5.5px 0;
+  padding: 0;
+  border: none;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: rgba(0, 0, 0, 0.78);
+  border-radius: 25px;
+  border: 0px solid #010101;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0.8px 0.8px 1px #000000, 0px 0px 0.8px #0d0d0d;
+  border: 0.4px solid #00001e;
+  height: 15px;
+  width: 14px;
+  border-radius: 50px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5.5px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: rgba(13, 13, 13, 0.78);
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: rgba(0, 0, 0, 0.78);
+  border-radius: 25px;
+  border: 0px solid #010101;
+}
+
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0.8px 0.8px 1px #000000, 0px 0px 0.8px #0d0d0d;
+  border: 0.4px solid #00001e;
+  height: 15px;
+  width: 14px;
+  border-radius: 50px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.78);
+  border: 0px solid #010101;
+  border-radius: 50px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+input[type=range]::-ms-fill-upper {
+  background: rgba(0, 0, 0, 0.78);
+  border: 0px solid #010101;
+  border-radius: 50px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+input[type=range]::-ms-thumb {
+  box-shadow: 0.8px 0.8px 1px #000000, 0px 0px 0.8px #0d0d0d;
+  border: 0.4px solid #00001e;
+  height: 15px;
+  width: 14px;
+  border-radius: 50px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 4px;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.78);
+}
+
+input[type=range]:focus::-ms-fill-upper {
+  background: rgba(13, 13, 13, 0.78);
+}
+
+//BOOTSTRAP FIXES
+// Against bootstrap
+label {
+  margin: 0 !important;
+}
+
+.custom-file-label {
+  overflow-x: hidden;
+}
+
+.modal {
+  overflow-y: scroll !important;
+}
+
+.progress .progress-bar {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+// Extend bootstrap
+
+.input-group-text {
+
+  input[type=color] {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: -15px 0;
+    background-color: #e9ecef;
+    border: none;
+  }
+
+}
+
+/* Color picker */
+.input-color-picker {
+  font-size: 14px;
+  margin-top: 5px;
+  margin-left: 5px;
+
+  label {
+    margin-top: 8px !important;
+    margin-right: 5px !important;
+  }
+
+}
+
+.vc-chrome {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  z-index: 9;
+}
+
+.current-color {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-color: #000000;
+  cursor: pointer;
+}
+
+/***********/
+/* TSearch */
+/***********/
+
+#tsearch {
+
+  input::placeholder {
+    color: #000000;
+    opacity: 0.4;
+  }
+
+}
+
+.tsearch-toolbar {
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #e9ecef;
+  color: #7f8c8d;
+}
+
+.tsearch-close {
+  cursor: pointer;
+  padding-top: 2px;
+  padding-left: 5px;
+}
+
+.tsearch-drag-handle {
+  cursor: move;
+  //padding-top:   2px;
+  //padding-left:  7px;
+  //padding-right: 5px;
+}
+
+.autocomplete-list {
+  //position:        absolute;
+  overflow: auto;
+  //top:             45px;
+  max-height: 600px;
+  //background:      #ecf0f1;
+  //color:           #34495e;
+  list-style-type: none;
+  padding: 0 10px 10px;
+  //border-bottom: 4px solid rgba(52, 73, 94, 0.1);
+  //margin-bottom: 0 !important;
+  width: 100%;
+  margin-top: -5px;
+  z-index: 0;
+
+  h6 {
+    text-align: left;
+    padding: 15px;
+    margin: 0;
+  }
+
+  .autocomplete-list-item {
+    z-index: 0;
+  }
+
+  .autocomplete-list-item:hover {
+    z-index: 0;
+  }
+
+  //li {
+  //    padding-top: 5px;
+  //    padding-bottom: 5px;
+  //    padding-right: 15px;
+  //    padding-left: 15px;
+  //    border-bottom: 1px solid rgba(52, 73, 94, 0.2)
+  //}
+  //
+  //li:hover {
+  //    background-color: rgba(52, 73, 94, 0.2);
+  //    cursor: pointer;
+  //}
+  //
+  //li small {
+  //    color: #c0392b;
+  //}
+
+}
+
+/**********/
+/* TTable */
+/**********/
+
+.ttable-close {
+  cursor: pointer;
+}
+
+.ttable-drag-handle {
+  cursor: move;
+  //padding-left: 5px;
+}
+
+.ttable {
+  min-width: 385px;
+  max-width: 500px;
+  max-height: 800px;
+  border-radius: 7px;
+
+  thead {
+    display: block;
+  }
+
+  thead tr {
+    color: #7f8c8d;
+  }
+
+  thead tr th {
+  }
+
+  tbody {
+    display: block;
+    width: 100%;
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: right;
+  }
+
+  tbody tr td {
+    font-size: 13px;
+  }
+
+  tbody tr td:first-child {
+    text-align: left;
+    width: 30%;
+    text-transform: capitalize;
+  }
+
+  tbody tr td:last-child {
+    width: 70%;
+  }
+
+  tbody tr td h6 {
+    text-transform: none;
+  }
+
+  .ttable-title {
+
+    .ttable-label {
+      float: left;
+      padding-top: 6px;
+      padding-bottom: 4px;
+      margin: 0;
+    }
+
+    .ttable-toolbar {
+      float: right;
+    }
+
+  }
+
+}
+
+
+
+
+//// Option B: Include parts of Bootstrap
+//
+//// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+//@import "node_modules/bootstrap/scss/functions";
+//
+//// 2. Include any default variable overrides here
+//// ...
+////$primary: #0074d9;
+////$danger: #ff4136;
+//
+//// 3. Include remainder of required Bootstrap stylesheets
+//@import "node_modules/bootstrap/scss/variables";
+//@import "node_modules/bootstrap/scss/mixins";
+//
+//// 4. Include any optional Bootstrap components as you like
+//@import "node_modules/bootstrap/scss/root";
+//@import "node_modules/bootstrap/scss/reboot";
+//@import "node_modules/bootstrap/scss/type";
+//@import "node_modules/bootstrap/scss/images";
+////@import "node_modules/bootstrap/scss/containers";
+//@import "node_modules/bootstrap/scss/grid";
+//
+//// 5. Add additional custom code here
+//// ...
+//
+//// Then bootstrap-vue specific stuff
+//@import "./node_modules/bootstrap-vue/src/index.scss";
+//
+//// And finally custom SCSS for our components
+////@import "components/index";
+//
+
+.itee-fake-debug-class {
+  color: $primary;
+}
+
+.itee-fake-debug-class-fn {
+  color: theme-color("primary");
+}
+
+
+// anaglyph in
+.navbar-dark .navbar-nav .nav-link {
+  color: #ededed;
+  filter: drop-shadow(-1px 0px 0px #ff000088) drop-shadow(1px 0px 0px #00ffff88) drop-shadow(1px 0px 0px #ffffff);
+}
+// anaglyph out
+.navbar-dark .navbar-nav .nav-link {
+  color: #ededed;
+  filter: drop-shadow(1px 0px 0px #ff000088) drop-shadow(-1px 0px 0px #00ffff88);
+}
