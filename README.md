@@ -6,13 +6,13 @@
 <br>
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/itee-ui">
+    <a href="https://www.npmjs.com/package/itee-ui" target="_blank" rel="noopener noreferrer">
         <img src="https://img.shields.io/npm/v/itee-ui" alt="Current package version">
     </a>
-    <a href="https://travis-ci.org/Itee/itee-ui">
-        <img src="https://travis-ci.org/Itee/itee-ui.svg?branch=master" alt="Build status">
+    <a href="https://github.com/Itee/itee-ui" target="_blank" rel="noopener noreferrer">
+        <img src="https://github.com/Itee/itee-ui/actions/workflows/node.js.yml/badge.svg" alt="Itee-UI CI">
     </a>
-    <a href="https://github.com/semantic-release/semantic-release">
+    <a href="https://github.com/semantic-release/semantic-release" target="_blank" rel="noopener noreferrer">
         <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Build status">
     </a>
 </p>
